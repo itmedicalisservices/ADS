@@ -116,18 +116,15 @@ class smi extends CI_Controller {
 					"par_iSta"=>1,
 					"par_dDate"=>date("Y-m-d"),
 					"par_tHeure"=>date("H:m:s"),
-					"par_iGeste"=>$data["gestite"],
-					"par_iParite"=>$data["parite"],
-					"par_sRupture"=>$data["rupture"],
 					"par_iRythme"=>$data["rythme"],
-					"par_iAmniotique"=>$data["amniotique"],
-					"par_iModelage"=>$data["modelage"],
+					"par_sAmniotique"=>$data["amniotique"],
+					"par_sModelage"=>$data["modelage"],
 					"par_iDescente"=>$data["descente"],
 					"par_iNombres_heures"=>$data["heures"],
 					"par_iNb_contraction"=>$data["contractions"],
 					"par_iOxytocine"=>$data["oxytocine"],
 					"par_sMedicament"=>$data["medicament"],
-					"par_sTA"=>$data["TA"],
+					"par_iTA"=>$data["TA"],
 					"par_iPouls"=>$data["pouls"],
 					"par_iTemperature"=>$data["temperature"],
 					"par_iProteinurie"=>$data["proteinurie"],
@@ -158,18 +155,15 @@ class smi extends CI_Controller {
 					"par_iSta"=>1,
 					"par_dDate"=>date("Y-m-d"),
 					"par_tHeure"=>date("H:m:s"),
-					"par_iGeste"=>$data["gestite"],
-					"par_iParite"=>$data["parite"],
-					"par_sRupture"=>$data["rupture"],
 					"par_iRythme"=>$data["rythme"],
-					"par_iAmniotique"=>$data["amniotique"],
-					"par_iModelage"=>$data["modelage"],
+					"par_sAmniotique"=>$data["amniotique"],
+					"par_sModelage"=>$data["modelage"],
 					"par_iDescente"=>$data["descente"],
 					"par_iNombres_heures"=>$data["heures"],
 					"par_iNb_contraction"=>$data["contractions"],
 					"par_iOxytocine"=>$data["oxytocine"],
 					"par_sMedicament"=>$data["medicament"],
-					"par_sTA"=>$data["TA"],
+					"par_iTA"=>$data["TA"],
 					"par_iPouls"=>$data["pouls"],
 					"par_iTemperature"=>$data["temperature"],
 					"par_iProteinurie"=>$data["proteinurie"],
@@ -196,6 +190,86 @@ class smi extends CI_Controller {
 			}
 		}
 	}
+
+	/** Informations complémentaires sur la gestion **/
+	public function addInfoComp()
+	{
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+		if(empty($data)){
+			echo "erreur";
+			
+		}
+		else{
+			
+			
+			$verif = $this->md_patient->verif_sejour($data["id"],date("Y-m-d"));
+			if(!$verif){
+				$donneesSejour = array(
+					"acm_id"=>$data["id"],
+					"sea_dDate"=>date("Y-m-d")
+				);
+				$sejour = $this->md_patient->ajout_sejour_acm($donneesSejour);
+				$donnees = array(
+					"icg_iSta"=>1,
+					"icg_dDate"=>date("Y-m-d"),
+					"icg_iGeste"=>$data["gesation"],
+					"icg_iParite"=>$data["parite"],
+					"icg_sRupture"=>$data["rupture"],
+					"sea_id"=>$sejour->sea_id,
+					"pat_id"=>$data["pat"]
+				);
+				
+				$ajout = $this->md_smi->ajout_Info_gestation($donnees);
+				if($ajout){
+					$acm = $this->md_patient->acm_patient($data["id"]);
+					$patient = $this->md_patient->recup_patient($acm->pat_id);
+					$log = array(
+						"log_iSta"=>0,
+						"per_id"=>$this->md_config->get_session(),
+						"log_sTable"=>"t_information_complementaire_gestation_icg",
+						"log_sIcone"=>"Informations complémentaires sur la gestation",
+						"log_sAction"=>"Les informations sur la gestion du patient: ".$patient->pat_sNom." ".$patient->pat_sPrenom."(".$patient->pat_sMatricule.") ont été mise à jour",
+						"log_dDate"=>date("Y-m-d H:i:s")
+					);
+					$this->md_connexion->rapport($log);
+					echo "ok";
+				}
+			}
+			else{
+				$sejour = $verif;
+				$donnees = array(
+					"icg_iSta"=>1,
+					"icg_dDate"=>date("Y-m-d"),
+					"icg_iGeste"=>$data["gesation"],
+					"icg_iParite"=>$data["parite"],
+					"icg_sRupture"=>$data["rupture"],
+					"sea_id"=>$sejour->sea_id,
+					"pat_id"=>$data["pat"]
+				);
+				
+				$ajout = $this->md_smi->ajout_Info_gestation($donnees);
+				if($ajout){
+					$acm = $this->md_patient->acm_patient($data["id"]);
+					$patient = $this->md_patient->recup_patient($acm->pat_id);
+					$log = array(
+						"log_iSta"=>0,
+						"per_id"=>$this->md_config->get_session(),
+						"log_sTable"=>"t_information_complementaire_gestation_icg",
+						"log_sIcone"=>"Informations complémentaires sur la gestation",
+						"log_sAction"=>"Les informations sur la gestion du patient: ".$patient->pat_sNom." ".$patient->pat_sPrenom."(".$patient->pat_sMatricule.") ont été mise à jour  ",
+						"log_dDate"=>date("Y-m-d H:i:s")
+					);
+					$this->md_connexion->rapport($log);
+					echo "ok";
+				}
+			}
+		}
+	}
+	
+	
+	
+	
 	/** Examen clinique **/
 	public function addExamen()
 	{
@@ -1897,8 +1971,9 @@ class smi extends CI_Controller {
 			$observations = $this->md_smi->recup_Observations_sejour($data["id"]);
 			
 			
-			echo '<div class="">
-					<h3>Observations cliniques<small class="text-success pull-right" style="font-size:14px"><i class="fa fa-calendar"></i> Fait ' . $this->md_config->affDateFrNum($observations[0]->obc_dDate). '</small></h3>                                        
+			echo '<div class="">';
+			foreach($observations as $s){
+					echo '<h3>Observations cliniques<small class="text-success pull-right" style="font-size:14px"><i class="fa fa-calendar"></i> Fait ' . $this->md_config->affDateFrNum($s->obc_dDate). '</small></h3>                                        
 					<div class="row " style="margin-bottom:12px">	
 							<div class="col-sm-12">
 								<table style="width:100%;padding:0;" id="example" class="table table-bordered table-striped table-hover">
@@ -1924,13 +1999,13 @@ class smi extends CI_Controller {
 										</th>
 									</tr>
 									';
-									foreach($observations as $s){
+									
 										echo'<tr>
 												<td>';
-													if ($s->obc_iAge != "") {
+													if ($s->obc_iAge != 0) {
 														echo '<b>'.$s->obc_iAge .'</b>';
 													} else {
-														echo '<i><br>Non renseignée</i>';
+														echo '<i>0</i>';
 													}
 													echo'
 												</td>
@@ -1938,7 +2013,7 @@ class smi extends CI_Controller {
 													if ($s->obc_iPoids != 0) {
 														echo '<b>'.$s->obc_iPoids . '</b>';
 													} else {
-														echo '<i><br>Non renseignée</i>';
+														echo '<i>0</i>';
 													}
 												echo '</td>
 												<td>';
@@ -1971,12 +2046,13 @@ class smi extends CI_Controller {
 												
 												echo '</td>
 												</tr>';
-									}
+									
 									
 								echo '</table>
 							</div>
-						</div>
-				</div>';
+						</div>';
+						}
+				echo'</div>';
 			
 		}
 	}
@@ -3430,9 +3506,6 @@ class smi extends CI_Controller {
 								<table id="example" class="table table-bordered table-striped table-hover">
 									<thead>
 										<tr>
-											<th>Gestité</th>
-											<th>Parité</th>
-											<th>Rupture des membranes</th>
 											<th>Rythme cardiaque foetal </th>
 											<th>Liquide amniotique </th>
 											<th>Modelage de la tête </th>
@@ -3453,19 +3526,16 @@ class smi extends CI_Controller {
 									<tbody>';
 										foreach($partogramme as $p){
 											echo '<tr>
-											<td>'.$p->par_iGeste.'</td>
-											<td>'.$p->par_iParite.'</td>
-											<td>'.$p->par_sRupture.'</td>
 											<td>'.$p->par_iRythme.'</td>
-											<td>'.$p->par_iAmniotique.'</td>
-											<td>'.$p->par_iModelage.'</td>
+											<td>'.$p->par_sAmniotique.'</td>
+											<td>'.$p->par_sModelage.'</td>
 											<td>'.$p->par_iDescente.'</td>
 											<td>'.$p->par_iNombres_heures.'</td>
 											<td>'.$p->par_tHeure.'</td>
 											<td>'.$p->par_iNb_contraction.'</td>
 											<td>'.$p->par_iOxytocine.'</td>
 											<td>'.$p->par_sMedicament.'</td>
-											<td>'.$p->par_sTA.'</td>
+											<td>'.$p->par_iTA.'</td>
 											<td>'.$p->par_iPouls.'</td>
 											<td>'.$p->par_iTemperature.'</td>
 											<td>'.$p->par_iProteinurie.'</td>
@@ -3479,6 +3549,49 @@ class smi extends CI_Controller {
 						</div>
 					</div>
 				</div>';
+		}
+	}
+	public function recupInfoGestion()
+	{
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+		if (empty($data)) {
+			echo "erreur";
+			// var_dump($data);
+		} else {
+			$InfoGes = $this->md_smi->recup_InfoGestation_sejour($data["id"]);
+			
+			foreach($InfoGes as $p){
+				echo '<div class="post-box">
+					<h3>Informations complemùentaires sur la gestation <small class="text-success pull-right" style="font-size:14px"><i class="fa fa-calendar"></i> Pris le '.$this->md_config->dateEN2FR($p->icg_dDate).'</small></h3>                                        
+					<br>                                  
+					<div class="body p-l-0 p-r-0">
+						<div class="row clearfix" style="margin-bottom:12px">	
+							<div class="col-xl-12">
+								<table id="example" class="table table-bordered table-striped table-hover">
+									<thead>
+										<tr>
+											<th>Gestation</th>
+											<th>Pare</th>
+											<th>Rupture de la membranes</th>
+										</tr>
+									</thead>
+								   
+									<tbody>';
+										
+											echo '<tr>
+											<td>'.$p->icg_iGeste.'</td>
+											<td>'.$p->icg_iParite.'</td>
+											<td>'.$p->icg_sRupture.'</td>
+										</tr>';
+										
+									echo '</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>';
+			}
 		}
 	}
 	

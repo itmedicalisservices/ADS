@@ -186,8 +186,10 @@
 			allowClear: true
 		});
 	  
-	  </script>
-	  <script>
+</script>
+	  
+	  
+<script>
     (function () {
        new FroalaEditor('.edit');
        new FroalaEditor('#edit');
@@ -263,7 +265,187 @@
 		
 		return config;
 	}
+</script>
+
+  <?php if(isset($listeobservations)) { ?>
+<script>
+    (function () {
+       new FroalaEditor('.edit');
+       new FroalaEditor('#edit');
+       new FroalaEditor('#edit_2');
+       new FroalaEditor('#edit_3');
+       new FroalaEditor('#indication');
+    })();
+	
+	$(function () {
+		Etat = new Chart(document.getElementById("etat").getContext("2d"), getChartJs('line'));
+	});
+	
+	
+
+	function getChartJs(type) {
+		var configEtat = null;
+		
+		var age = document.getElementsByClassName("age");
+		var poids = document.getElementsByClassName("poids");
+		
+		
+		var donneeAge = new Array();
+		var donneePoids = new Array();
+		
+		for(var i=0; i<age.length; i++){
+			donneeAge.push(age[i].value);
+		}
+		
+		for(var j=0; j<poids.length; j++){
+			donneePoids.push(poids[j].value);
+			
+		}
+		
+		
+		if (type === 'line') {
+			configEtat = {
+				type: 'line',
+				data: {
+					labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,,35,36,37,38,39,40,41,42,,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60],
+					datasets: [{
+						label: "Poids",
+						data: donneePoids,
+						borderColor: 'rgba(0, 188, 212, 0.75)',
+						backgroundColor: 'rgba(0, 188, 212, 0.3)',
+						pointBorderColor: 'rgba(0, 188, 212, 0)',
+						pointBackgroundColor: 'rgba(0, 188, 212, 0.9)',
+						pointBorderWidth: 1
+					}]
+				},
+				options: {
+					responsive: true,
+					legend: false
+				}
+			}
+		}
+		
+		return configEtat;
+	}
   </script>
+  
+  <?php } ?>
+  
+   <?php if(isset($listePartogramme)) { ?>
+  <script>
+    (function () {
+       new FroalaEditor('.edit');
+       new FroalaEditor('#edit');
+       new FroalaEditor('#edit_2');
+       new FroalaEditor('#edit_3');
+       new FroalaEditor('#indication');
+    })();
+	
+	$(function () {
+		parto = new Chart(document.getElementById("partogramme").getContext("2d"), getChartJs('line'));
+	});
+	
+	
+
+	function getChartJs(type) {
+		var configPartogramme = null;
+		
+		var rythme = document.getElementsByClassName("rythme");
+		var descente = document.getElementsByClassName("descente");
+		var contraction = document.getElementsByClassName("contraction");
+		var pouls = document.getElementsByClassName("pouls");
+		var TA = document.getElementsByClassName("TA");
+		
+		var donneeRythme = new Array();
+		var donneeDescente = new Array();
+		var donneeContraction = new Array();
+		var donneePouls = new Array();
+		var donneeTA = new Array();
+		
+		for(var i=0; i<descente.length; i++){
+			donneeDescente.push(descente[i].value);
+		}
+		for(var i=0; i<contraction.length; i++){
+			donneeContraction.push(contraction[i].value);
+		}
+		
+		for(var i=0; i<rythme.length; i++){
+			donneeRythme.push(rythme[i].value);
+		}
+		
+		for(var i=0; i<pouls.length; i++){
+			donneePouls.push(pouls[i].value);
+		}
+		for(var i=0; i<TA.length; i++){
+			donneeTA.push(TA[i].value);
+		}
+		
+		if (type === 'line') {
+			configPartogramme = {
+				type: 'line',
+				data: {
+					labels:  [1,2,3,4,5,6,7,8,9,10,11,12],
+					datasets: [{
+						label: "Rythme cardiaque",
+						data: donneeRythme,
+						borderColor: 'rgba(0, 188, 212, 0.75)',
+						backgroundColor: 'rgba(0, 188, 212, 0.3)',
+						pointBorderColor: 'rgba(0, 188, 212, 0)',
+						pointBackgroundColor: 'rgba(0, 188, 212, 0.9)',
+						pointBorderWidth: 1
+					}, {
+							label: "Descente de la tête",
+							data: donneeDescente,
+							borderColor: 'rgba(233, 30, 99, 0.75)',
+							backgroundColor: 'rgba(233, 30, 99, 0.3)',
+							pointBorderColor: 'rgba(233, 30, 99, 0)',
+							pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+							pointBorderWidth: 1
+						}, {
+							label: "Nombre de contractions",
+							data: donneeContraction,
+							borderColor: 'rgba(100, 30, 99, 0.75)',
+							backgroundColor: 'rgba(100, 30, 99, 0.3)',
+							pointBorderColor: 'rgba(100, 30, 99, 0)',
+							pointBackgroundColor: 'rgba(100, 30, 99, 0.9)',
+							pointBorderWidth: 1
+						}, {
+							label: "pouls",
+							data: donneePouls,
+							borderColor: 'rgba(0, 142, 99, 0.75)',
+							backgroundColor: 'rgba(0, 142, 99, 0.3)',
+							pointBorderColor: 'rgba(0, 142, 99, 0)',
+							pointBackgroundColor: 'rgba(0, 142, 99, 0.9)',
+							pointBorderWidth: 1
+						}, {
+							label: "TA",
+							data: donneeTA,
+							borderColor: 'rgba(228, 33, 34, 0.75)',
+							backgroundColor: 'rgba(228, 33, 34, 0.3)',
+							pointBorderColor: 'rgba(228, 33, 34, 0)',
+							pointBackgroundColor: 'rgba(228, 33, 34, 0.9)',
+							pointBorderWidth: 1
+						}]
+				},
+				options: {
+					responsive: true,
+					legend:  {
+						display: true,
+						labels: {
+							fontColor: 'rgb(0, 0, 0)'
+						}
+					}
+				}
+			}
+		}
+		
+		return configPartogramme;
+	}
+  </script>
+  
+
+   <?php } ?>
+  
 	
  <script type="text/javascript">
     var IDLE_TIMEOUT = 10 * 60;  // 10 minutes of inactivity

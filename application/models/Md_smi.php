@@ -26,6 +26,7 @@ class Md_smi extends CI_Model {
 	protected $tablePer = "armee.t_personnel_per";
 	protected $tableExa = "armee.t_Examen_clinique_exa";
 	protected $tablePar = "armee.t_partogramme_par";
+	protected $tableIcg = "armee.t_information_complementaire_gestation_icg";
 	
 	
 	public function nb_antecedant_lob()
@@ -466,6 +467,50 @@ class Md_smi extends CI_Model {
 		->where("pat_id",$id)
 		->get($this->tablePar)->row();
 	}
+	public function liste_element_Partogramme($id)
+	{
+		return $this->db
+		
+		->join($this->tableSea, $this->tableSea.'.sea_id ='.$this->tablePar.'.sea_id ','inner')
+		->join($this->tableAcm, $this->tableAcm.'.acm_id ='.$this->tableSea.'.acm_id ','inner')
+		->where($this->tableSea.".acm_id",$id)
+		->get($this->tablePar)->result();
+	}
+	
+	/** Information complementaire sur la gestation de la femme **/
+	
+	public function ajout_Info_gestation($donnees){
+		return $this->db->insert($this->tableIcg,$donnees);
+	}
+	
+	public function maj_Info_gestation($donnees,$id){
+		return $this->db->where("icg_id",$id)->update($this->tableIcg,$donnees);
+	}
+	
+	public function verif_Info_gestation($id)
+	{
+		return $this->db
+		->where("sea_id",$id)
+		->get($this->tableIcg)->row();
+	}
+	
+	
+	public function recup_Info_comp_gestation($id)
+	{
+		return $this->db
+		->join($this->tableSea, $this->tableSea.'.sea_id ='.$this->tableIcg.'.sea_id ','inner')
+		->where($this->tableSea.".acm_id",$id)
+		->get($this->tableIcg)->row();
+	}
+	
+	public function recup_patient_Info_comp_gestation($id)
+	{
+		return $this->db
+		->join($this->tableAcm, $this->tableAcm.'.acm_id ='.$this->tableSea.'.acm_id ','inner')
+		->join($this->tableSea, $this->tableSea.'.sea_id ='.$this->tableIcg.'.sea_id ','inner')
+		->where("pat_id",$id)
+		->get($this->tableIcg)->row();
+	}
 	
 	
 	/**Examen clinique**/
@@ -718,6 +763,15 @@ class Md_smi extends CI_Model {
 		->get($this->tableObc)->row();
 	}
 	
+	public function listeobservations($id)
+	{
+		return $this->db
+		->join($this->tableSea, $this->tableSea.'.sea_id ='.$this->tableObc.'.sea_id ','inner')
+		->where($this->tableSea.".acm_id",$id)
+		->order_by($this->tableObc.".obc_id","asc")
+		->get($this->tableObc)->result();
+	}
+	
 	public function liste_Observations($id)
 	{
 		return $this->db
@@ -828,6 +882,16 @@ class Md_smi extends CI_Model {
 		->order_by($this->tablePar.".par_id","desc")
 		->get($this->tablePar)->result();
 	}
+	public function recup_InfoGestation_sejour($id)
+	{
+		return $this->db
+		->join($this->tableSea, $this->tableSea.'.sea_id ='.$this->tableIcg.'.sea_id ','inner')
+		->join($this->tableAcm, $this->tableAcm.'.acm_id ='.$this->tableSea.'.acm_id ','inner')
+		->join($this->tableLac, $this->tableLac.'.lac_id ='.$this->tableAcm.'.lac_id ','inner')
+		->where($this->tableIcg.".sea_id",$id)
+		->order_by($this->tableIcg.".icg_id","desc")
+		->get($this->tableIcg)->result();
+	}
 	
 	
 	public function recup_info_premiere_examen_sejour($id)
@@ -923,7 +987,7 @@ class Md_smi extends CI_Model {
 		->join($this->tableLac, $this->tableLac.'.lac_id ='.$this->tableAcm.'.lac_id ','inner')
 		->where($this->tableObc.".sea_id",$id)
 		->order_by($this->tableObc.".obc_id","desc")
-		->get($this->tableObc)->row();
+		->get($this->tableObc)->result();
 	}
 	
 	public function recup_VaccinationEnfant_sejour($id)

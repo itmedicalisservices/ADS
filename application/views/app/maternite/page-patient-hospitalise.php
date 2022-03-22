@@ -24,6 +24,7 @@
 <?php $prof = $this->md_parametre->liste_activite_professionnelle_actifs(); ?>
 <?php $listeActeLabo = $this->md_parametre->liste_acts_laboratoires_actifs(); ?>
 <?php $listeConstante = $this->md_patient->liste_constante_vitale($acm_id); ?>
+<?php $listePartogramme = $this->md_smi->liste_element_Partogramme($acm_id); ?>
 <?php $listeEncours = $this->md_patient->liste_acm_dossier_patient($acm->pat_id,date("Y-m-d H:i:s")); ?>
 <?php $rdv = $this->md_rdv->liste_de_mes_rdv();
 $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
@@ -38,6 +39,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 
 
 <?php $info_conjoint = $this->md_smi->recup_conjoint($acm_id); ?>
+<?php $info_comp = $this->md_smi->recup_Info_comp_gestation($acm_id); ?>
 
 
 <section class="content profile-page">
@@ -106,8 +108,9 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
                             <li class="nav-item"><a class="nav-link active"data-toggle="tab" href="#rapport"><b>Dossier patient</b></a></li>
 							 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#info_conjoint"><b>Information du conjoint</b></a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Examen_clinique"><b>Examen clinique</b></a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Partogramme"><b>Partogramme</b></a></li>
-							<li class="nav-item"><a class="nav-link" data-toggle="tab" id="or" href="#ordonnance"><b> Ordonnance</b></a></li>
+                           
+                           
+							
 							<!-- Nav tabs<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#constante"><b>Constante vitale</b></a></li> -->
                         </ul>
 						 <!-- Nav tabs <ul class="nav nav-tabs" role="tablist" style="font-size:14px">
@@ -118,14 +121,19 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
                         
                         </ul>	 -->
 						<ul class="nav nav-tabs" role="tablist" style="font-size:13.5px">
-						
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#soins" id="so"><b>Protocoles de soins</b></a></li>
-							<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#labo"><b> Examen laboratoire</b></a></li>
-							<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ne"><b>Déclaration Nouveau né</b></a></li>
+							 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#InfoComp"><b>information complementaire sur la gestation</b></a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Partogramme"><b>Partogramme</b></a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab" id="or" href="#ordonnance"><b> Ordonnance</b></a></li>
 							<!-- Nav tabs <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reeducation"><b>Rééducation</b></a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#exploration"><b>Exploration fonctionnelle</b></a></li>-->
                              
 							<!-- Nav tabs<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#avis"><b>Avis de spécialiste</b></a></li> -->
+                        </ul>
+						<ul class="nav nav-tabs" role="tablist" style="font-size:13.5px">
+						
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#soins" id="so"><b>Protocoles de soins</b></a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#labo"><b> Examen laboratoire</b></a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#ne"><b>Déclaration Nouveau né</b></a></li>
                         </ul>
 						 <!-- Nav tabs<ul class="nav nav-tabs" role="tablist" style="font-size:13.5px">
                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#diagnostic"><b>Maladie(s) diagnostiquée(s)</b></a></li>
@@ -167,15 +175,17 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 										<div class="col-lg-12 col-md-12 col-sm-12">
 											<div class="card">
 												<div class="header">
-													<h2>Évolution des constantes vitales</h2>
-													<?php foreach($listeConstante AS $lc){ ?>
-														<input type="hidden" class="tension" value="<?php echo $lc->con_iTensionDia; ?>"/>
-														<input type="hidden" class="temperature" value="<?php echo $lc->con_iTemperature;?>"/>
-														<input type="hidden" class="prise" value="<?php echo $this->md_config->affDateTimeFr($lc->con_dDate);?>"/>
+													<h2>Partogramme</h2>
+													<?php foreach($listePartogramme AS $lc){ ?>
+														<input type="hidden" class="rythme" value="<?php echo $lc->par_iRythme; ?>"/>
+														<input type="hidden" class="descente" value="<?php echo $lc->par_iDescente; ?>"/>
+														<input type="hidden" class="contraction" value="<?php echo $lc->par_iNb_contraction; ?>"/>
+														<input type="hidden" class="pouls" value="<?php echo $lc->par_iPouls; ?>"/>
+														<input type="hidden" class="TA" value="<?php echo $lc->par_iTA; ?>"/>
 													<?php } ?>
 												</div>
 												<div class="body">
-													<canvas id="contante" height="100"></canvas>
+													<canvas id="partogramme" height="150"></canvas>
 												</div>
 											</div>
 										</div>
@@ -197,6 +207,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 													$info_conjoint_sejour = $this->md_smi->recup_conjoint_sejour($l->sea_id);
 													$Examen_clinique_sejour = $this->md_smi->recup_examen_clinique_sejour($l->sea_id);
 													$Partogramme_sejour = $this->md_smi->recup_Partogramme_sejour($l->sea_id);
+													$info_gestation_comp_sejour = $this->md_smi->recup_InfoGestation_sejour($l->sea_id);
 													
 													
 													$constante_sejour = $this->md_patient->constante_sejour($l->sea_id);
@@ -235,6 +246,14 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 															</tr>
 															<?php } ?>
 															
+															<?php if($info_gestation_comp_sejour){ ?>
+															<tr>
+																<td>Information complementaire sur la gestion</td>
+																<td style="width:17.6%">
+																	<a href="javascript:();" rel="<?php echo $l->sea_id;  ?>" class="text-info InfoComp_sej" style="color:#fff"><i class="fa fa-arrow-right pull-right" style="font-size:25px"></i></a>
+																</td>
+															</tr>
+															<?php } ?>
 															<?php if($Partogramme_sejour){ ?>
 															<tr>
 																<td>Partogramme</td>
@@ -374,6 +393,54 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 									</div>
 								</div>
                             </div>
+							<div role="tabpanel" class="tab-pane" id="InfoComp">
+                                  <div class="header" style="margin-top:45px">
+									<h2>Information complementaire sur la gestion <small>renseignez tous les champs marqués par des (*)</small> </h2>
+									
+								</div>
+								<div class="body">
+									<form id="form-InfoComp">
+										<div class="col-sm-12 retour-InfoComp"></div>
+										<div class="row clearfix">
+											
+											<div class="col-sm-6">
+												<div class="form-group">
+													<div class="form-line">
+													<label style="color:#000">Nombre de gestion (*)</label>
+														<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+														<input type="hidden" value="<?php echo $patient->pat_id; ?>" name="pat">
+														<input type="number" class="form-control obligatoire" rows="10" name="gesation" value="<?php if($info_comp){echo $info_comp->icg_iGeste ;}?>">
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="form-group">
+													<div class="form-line">
+													<label style="color:#000">parité (*)</label>
+														<input class="form-control obligatoire" type="number"  name="parite" value="<?php if($info_comp){echo $info_comp->icg_iParite ;}?>">
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group">
+													<div class="form-line">
+													<label style="color:#000">Rupture des membrane (*)</label>
+														<input type="text" class="form-control obligatoire" name="rupture" value="<?php if($info_comp){echo $info_comp->icg_sRupture ;}?>">
+													</div>
+												</div>
+											</div>
+											
+											
+										</div>
+										
+										<div class="row clearfix">
+											<div class="col-sm-12">
+												<button type="submit" class="btn btn-raised bg-blue-grey" id="addInfoComp">Enregistrer</button>
+											</div>
+										</div>
+									</form>
+								</div>
+                            </div>
 							<div role="tabpanel" class="tab-pane" id="Partogramme">
                                   <div class="header" style="margin-top:45px">
 									<h2>Partogramme <small>renseignez tous les champs marqués par des (*)</small> </h2>
@@ -383,39 +450,14 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 									<form id="form-partogramme">
 										<div class="col-sm-12 retour-partogramme"></div>
 										<div class="row clearfix">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<div class="form-line">
-													<label style="color:#000">Gestité (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="gestite"><?php if($consultation){echo $consultation->csl_sMotif ;}?></textarea>
-														<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
-														<input type="hidden" value="<?php echo $patient->pat_id; ?>" name="pat">
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-6">
-												<div class="form-group">
-													<div class="form-line">
-													<label style="color:#000">Parité (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="parite"><?php if($consultation){echo $consultation->csl_sMotif ;}?></textarea>
-													</div>
-												</div>
-											</div>
-											
-											<div class="col-sm-6">
-												<div class="form-group">
-													<div class="form-line">
-													<label style="color:#000">Rupture des membranes (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="rupture"><?php if($consultation){echo $consultation->csl_sMotif ;}?></textarea>
-													</div>
-												</div>
-											</div>
 											
 											<div class="col-sm-6">
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Rythme cardiaque foetal (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="rythme"><?php if($consultation){echo $consultation->csl_sMotif ;}?></textarea>
+														<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+														<input type="hidden" value="<?php echo $patient->pat_id; ?>" name="pat">
+														<input type="number" class="form-control obligatoire"  name="rythme" >
 													</div>
 												</div>
 											</div>
@@ -424,7 +466,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">Liquide amniotique (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="amniotique"><?php if($consultation){echo $consultation->csl_sObservation ;}?></textarea>
+														<input type="text" class="form-control obligatoire"  name="amniotique">
 													</div>
 												</div>
 												
@@ -433,7 +475,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Modelage de la tête (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="modelage"><?php if($consultation){echo $consultation->csl_sObservation ;}?></textarea>
+														<input type="text" class="form-control obligatoire" name="modelage" >
 													</div>
 												</div>
 											</div>
@@ -441,7 +483,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Descente de cla tête (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="descente"><?php if($consultation){echo $consultation->csl_sObservation ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="descente">
 													</div>
 												</div>
 											</div>
@@ -450,7 +492,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Nombres d'heures</label>
-														<textarea class="form-control obligatoire" rows="10" name="heures"><?php if($consultation){echo $consultation->csl_sAnamnese ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="heures">
 													</div>
 												</div>
 											</div>
@@ -459,7 +501,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Nombre de contractions en 10 minutes (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="contractions"><?php if($consultation){echo $consultation->csl_sAnamnese ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="contractions">
 													</div>
 												</div>
 											</div>
@@ -467,7 +509,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Oxytocine U/L (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="oxytocine"><?php if($consultation){echo $consultation->csl_sAnamnese ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="oxytocine">
 													</div>
 												</div>
 											</div>
@@ -476,7 +518,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Medicament et injections  (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="medicament"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="medicament">
 													</div>
 												</div>
 											</div>
@@ -484,7 +526,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Pouls (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="pouls"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire" name="pouls">
 														
 													</div>
 												</div>
@@ -494,7 +536,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">TA (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="TA"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire" name="TA">
 													</div>
 												</div>
 											</div>
@@ -503,7 +545,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Température (°c) (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="temperature"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire"  name="temperature">
 													</div>
 												</div>
 											</div>
@@ -511,7 +553,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Protéinurie (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="proteinurie"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire" name="proteinurie">
 													</div>
 												</div>
 											</div>
@@ -519,7 +561,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 												<div class="form-group">
 													<div class="form-line">
 													<label style="color:#000">Acetone (*)</label>
-														<textarea class="form-control obligatoire" rows="10" name="acetone"><?php if($consultation){echo $consultation->csl_sResume ;}?></textarea>
+														<input type="number" class="form-control obligatoire" name="acetone">
 													</div>
 												</div>
 											</div>
@@ -2900,5 +2942,8 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
         }
 
     </script>
+	
+	
+
 
 <?php include(dirname(__FILE__) . '/../includes/footer.php'); ?>

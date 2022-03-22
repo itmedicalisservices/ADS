@@ -589,6 +589,7 @@
 		
 		
 		
+		var addInfoComp = <?php echo json_encode(site_url('Smi/addInfoComp')); ?>;
 		var addPartogramme = <?php echo json_encode(site_url('Smi/addPartogramme')); ?>;
 		var addExamen = <?php echo json_encode(site_url('Smi/addExamen')); ?>;
 		var addInfoConjoint = <?php echo json_encode(site_url('Smi/addInfoConjoint')); ?>;
@@ -616,6 +617,7 @@
 		var recupVaccinationE = <?php echo json_encode(site_url('Smi/recupVaccinationE')); ?>;
 		var recupExamenClinique = <?php echo json_encode(site_url('Smi/recupExamenClinique')); ?>;
 		var recupPartogramme = <?php echo json_encode(site_url('Smi/recupPartogramme')); ?>;
+		var recupInfoGestion = <?php echo json_encode(site_url('Smi/recupInfoGestion')); ?>;
 		
 		
 		var addVaccinationFemme = <?php echo json_encode(site_url('Smi/addVaccinationFemme')); ?>;

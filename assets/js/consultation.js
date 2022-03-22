@@ -185,6 +185,54 @@ $("#addPartogramme").click(function(){
 });
 
 
+$("#addInfoComp").click(function(){
+		var nbError = 0;
+		$("form#form-InfoComp .obligatoire").each(function(){
+			if($.trim($(this).val()) == ""){
+				$(this).parent("div").addClass("has-error");
+				$(this).addClass("obligatoire-color");
+				nbError++;
+			}
+			else{
+				$(this).parent("div").removeClass("has-error");
+				$(this).removeClass("obligatoire-color");
+			}
+		});
+		/*var tab = $("#tbodyHyp").html();
+		var tab1 = $("#tbodyRet").html();
+		if($.trim(tab)=="" || $.trim(tab1)==""){
+			nbError++;
+		}*/
+		if(nbError == 0){
+			var data = $('form#form-InfoComp').serialize();
+			// alert(data);
+			$.ajax({
+				type:"POST",
+				url: addInfoComp,
+				data:data,
+				async:true,
+				error:function(xhr, status, error){
+					alert(xhr.responseText);
+				}
+				
+			})
+			.done(function(retour){
+				// alert(retour);
+				if(retour == "ok"){
+					location.reload(true);
+				}
+				else{
+					$(".retour-InfoComp").addClass("alert alert-danger").html(retour);
+				}			
+				
+			});
+		}else{
+			$(".retour-InfoComp").addClass("alert alert-danger").html("Veuillez renseigner tout les champs avec étoiles (*) SVP ");
+		}
+	return false;
+});
+
+
 
 /** Antécedents**/
 $("#addAntecedents").click(function(){
@@ -1905,6 +1953,27 @@ $(".Partogramme_sej").on("click",function(){
 	})
 	.done(function(retour){
 		$("#recepPartogramme").html(retour);
+	});
+	
+	return false;
+});
+
+$(".InfoComp_sej").on("click",function(){
+	
+	var data = $(this).attr("rel");
+	// alert(data);
+	$.ajax({
+		type:"POST",
+		url: recupInfoGestion,
+		data:"id="+data,
+		async:true,
+		error:function(xhr, status, error){
+			alert(xhr.responseText);
+		}
+		
+	})
+	.done(function(retour){
+		$("#recepConsultation").html(retour);
 	});
 	
 	return false;

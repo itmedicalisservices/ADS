@@ -2098,6 +2098,16 @@ $(function () {
     });
 });
 
+
+$(function () {
+    $('.InfoComp_sej').on('click', function () {
+        var color = $(this).data('color');
+		var paye=$(this).attr("rel");
+        $('#modalConsulte .modal-content').removeAttr('class').addClass('modal-content modal-col-' + color);
+        $('#modalConsulte').modal('show');
+    });
+});
+
 $(function () {
     $('.examen_clinique_sej').on('click', function () {
         var color = $(this).data('color');

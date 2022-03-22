@@ -30,6 +30,7 @@
 	
 <?php $info_Nais = $this->md_smi->recup_Info_Nais($acm_id); ?>
 <?php $observations = $this->md_smi->recup_Observations($acm_id); ?>
+<?php $listeobservations = $this->md_smi->listeObservations($acm_id); ?>
 <?php $vaccination = $this->md_smi->recup_VaccinationEnfant($acm_id); ?>
 <?php 
 
@@ -127,7 +128,23 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 							<div role="tabpanel" class="tab-pane in active" id="rapport">                              
 							
 								<div class="wrap-reset" style="margin-top:45px">
-									
+									<div class="row clearfix">
+										<div class="col-lg-12 col-md-12 col-sm-12">
+											<div class="card">
+												<div class="header">
+													<h2>APPRECIATION DE L'ETAT NUTRITIONNEL DE L'ENFANT</h2>
+													<?php foreach($listeobservations AS $l){ echo COUNT($listeobservations); ?>
+														<input type="hidden" class="age" value="<?php echo $l->obc_iAge; ?>"/>
+														<input type="hidden" class="poids" value="<?php echo $l->obc_iPoids;?>"/>
+														
+													<?php } ?>
+												</div>
+												<div class="body">
+													<canvas id="etat" height="150"></canvas>
+												</div>
+											</div>
+										</div>
+									</div>  
 									<div class="table-responsive">
 										
 										<?php if(empty($liste) AND empty($info_Nais) AND empty($observations)AND empty($vaccination)){echo "<span class='text-danger'>Aucune action n'a été faite sur les séjours de ce patient</span>";}else{?>
@@ -343,7 +360,6 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 								
                                 <div class="header" style="margin-top:45px">
 									<h2>prise des constantes <small>renseignez tous les champs marqués par des (*)</small> </h2>
-									
 								</div>
 								
 								<div class="body">
@@ -3145,5 +3161,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
     
     </script>
 	
+	
+
 	
 <?php include(dirname(__FILE__) . '/../includes/footer.php'); ?>
