@@ -623,5 +623,7 @@
 		var addVaccinationFemme = <?php echo json_encode(site_url('Smi/addVaccinationFemme')); ?>;
 		var ajoutVaccin = <?php echo json_encode(site_url('Parametre/ajoutVaccin')); ?>;
 		var modifierVaccin = <?php echo json_encode(site_url('Parametre/modifierVaccin')); ?>;
+		var addCourbe = <?php echo json_encode(site_url('Parametre/addCourbe')); ?>;
+		var modifierCourbe = <?php echo json_encode(site_url('Parametre/modifierCourbe')); ?>;
 		//RABY
 	</script>

@@ -32,6 +32,10 @@
 <?php $observations = $this->md_smi->recup_Observations($acm_id); ?>
 <?php $listeobservations = $this->md_smi->listeObservations($acm_id); ?>
 <?php $vaccination = $this->md_smi->recup_VaccinationEnfant($acm_id); ?>
+
+
+<?php $listeMax = $this->md_parametre->recup_courbe(1); ?>
+<?php $listeMin = $this->md_parametre->recup_courbe(2); ?>
 <?php 
 
 $listeEncours = $this->md_patient->liste_acm_dossier_patient($acm->pat_id,date("Y-m-d H:i:s"));
@@ -133,9 +137,18 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 											<div class="card">
 												<div class="header">
 													<h2>APPRECIATION DE L'ETAT NUTRITIONNEL DE L'ENFANT</h2>
-													<?php foreach($listeobservations AS $l){ echo COUNT($listeobservations); ?>
+													<?php foreach($listeobservations AS $l){  ?>
 														<input type="hidden" class="age" value="<?php echo $l->obc_iAge; ?>"/>
-														<input type="hidden" class="poids" value="<?php echo $l->obc_iPoids;?>"/>
+														<input type="hidden" class="Poids" value="<?php echo $l->obc_iPoids;?>"/>
+														
+													<?php } ?>
+													
+													<?php foreach($listeMax AS $l){  ?>
+														<input type="hidden" class="PoidsMax" value="<?php echo $l->cou_fPoids;?>"/>
+														
+													<?php } ?>
+													<?php foreach($listeMin AS $l){  ?>
+														<input type="hidden" class="PoidsMin" value="<?php echo $l->cou_fPoids;?>"/>
 														
 													<?php } ?>
 												</div>
@@ -1131,7 +1144,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">Age (*)</label>
-														<input type="number" value="<?php if(!is_null($observations)){echo $observations->obc_iAge;}?>" name="age" class="form-control obligatoire age">
+														<input type="number" value="<?php /*if(!is_null($observations)){echo $observations->obc_iAge;}*/?>" name="age" class="form-control obligatoire age">
 													</div>
 												</div>
 											</div>
@@ -1139,7 +1152,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">Poids (*)</label>
-														<input type="number" value="<?php if(!is_null($observations)){echo $observations->obc_iPoids;}?>" name="poids" class="form-control obligatoire poids">
+														<input type="number" value="<?php /*if(!is_null($observations)){echo $observations->obc_iPoids;}*/?>" name="poids" class="form-control obligatoire poids">
 														<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
 													</div>
 												</div>
@@ -1148,7 +1161,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">Taille (*)</label>
-														<input type="text" value="<?php if(!is_null($observations)){echo $observations->obc_iTaille;}?>" name="taille" class="form-control obligatoire taille">
+														<input type="text" value="<?php /*if(!is_null($observations)){echo $observations->obc_iTaille;}*/ ?>" name="taille" class="form-control obligatoire taille">
 													</div>
 												</div>
 											</div>							
@@ -1157,7 +1170,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">pc (*)</label>
-														<input type="text" value="<?php if(!is_null($observations)){echo $observations->obc_iPC;}?>" name="pc" class="form-control obligatoire pc">
+														<input type="text" value="<?php /*if(!is_null($observations)){echo $observations->obc_iPC;}*/ ?>" name="pc" class="form-control obligatoire pc">
 													</div>
 												</div>
 											</div>	
@@ -1165,7 +1178,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">PB (*)</label>
-														<input type="text" style="height:100px" value="<?php if(!is_null($observations)){echo $observations->obc_iPB;}?>" name="pb" class="form-control obligatoire pb">
+														<input type="text" style="height:100px" value="<?php /*if(!is_null($observations)){echo $observations->obc_iPB;}*/ ?>" name="pb" class="form-control obligatoire pb">
 													</div>
 												</div>
 											</div>	
@@ -1173,7 +1186,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 												<div class="form-group">
 													<div class="form-line">
 														<label style="color:#000">Examen clinique</label>
-														<textarea  name="examen" style="height:100px"  class="form-control examen"><?php if(!is_null($observations)){echo $observations->obc_sExamen_clinique;}?></textarea>
+														<textarea  name="examen" style="height:100px"  class="form-control examen"><?php /*if(!is_null($observations)){echo $observations->obc_sExamen_clinique;}*/ ?></textarea>
 													</div>
 												</div>
 											</div>	

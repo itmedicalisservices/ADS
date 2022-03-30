@@ -287,11 +287,15 @@
 		var configEtat = null;
 		
 		var age = document.getElementsByClassName("age");
-		var poids = document.getElementsByClassName("poids");
+		var poids = document.getElementsByClassName("Poids");
+		var poidsMax = document.getElementsByClassName("PoidsMax");
+		var poidsMin = document.getElementsByClassName("PoidsMin");
 		
 		
 		var donneeAge = new Array();
 		var donneePoids = new Array();
+		var donneePoidsMax = new Array();
+		var donneePoidsMin = new Array();
 		
 		for(var i=0; i<age.length; i++){
 			donneeAge.push(age[i].value);
@@ -301,14 +305,30 @@
 			donneePoids.push(poids[j].value);
 			
 		}
+		for(var j=0; j<poidsMax.length; j++){
+			donneePoidsMax.push(poidsMax[j].value);
+			
+		}
+		for(var j=0; j<poidsMin.length; j++){
+			donneePoidsMin.push(poidsMin[j].value);
+			
+		}
 		
 		
 		if (type === 'line') {
 			configEtat = {
 				type: 'line',
 				data: {
-					labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,,35,36,37,38,39,40,41,42,,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60],
+					labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,,35,36],
 					datasets: [{
+							label: "TA",
+							data: donneePoidsMax,
+							borderColor: 'rgba(228, 33, 34, 0.75)',
+							backgroundColor: 'rgba(228, 33, 34, 0.3)',
+							pointBorderColor: 'rgba(228, 33, 34, 0)',
+							pointBackgroundColor: 'rgba(228, 33, 34, 0.9)',
+							pointBorderWidth: 1
+						},{
 						label: "Poids",
 						data: donneePoids,
 						borderColor: 'rgba(0, 188, 212, 0.75)',
@@ -316,7 +336,15 @@
 						pointBorderColor: 'rgba(0, 188, 212, 0)',
 						pointBackgroundColor: 'rgba(0, 188, 212, 0.9)',
 						pointBorderWidth: 1
-					}]
+					}, {
+							label: "",
+							data: donneePoidsMin,
+							borderColor: 'rgba(233, 30, 99, 0.75)',
+							backgroundColor: 'rgba(233, 30, 99, 0.3)',
+							pointBorderColor: 'rgba(233, 30, 99, 0)',
+							pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+							pointBorderWidth: 1
+						}]
 				},
 				options: {
 					responsive: true,

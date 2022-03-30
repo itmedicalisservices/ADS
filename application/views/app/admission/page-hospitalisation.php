@@ -28,7 +28,7 @@
                             
                         </div>
 					<div class="body">
-                    <?php if(is_null($demande->dem_iMaternite)){?>
+                    <?php if(is_null($demande->dem_iMaternite)){ ?>
                         <form id="form-hos">
                             <div class="row clearfix">
                                 <div class="col-sm-12 retour-hos"></div>

@@ -75,6 +75,10 @@ class Parametre extends CI_Controller {
 	{
 		$this->load->view('app/parametre/page-vaccin');
 	}
+	public function courbe()
+	{
+		$this->load->view('app/parametre/page-courbe-croissance');
+	}
 	
 	
 	public function antecedent_obs()
@@ -4792,6 +4796,106 @@ class Parametre extends CI_Controller {
 				}		
 			}
 	}
+	
+	
+	
+	
+	public function addCourbe()
+	{
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+		if(empty($data)){
+			return redirect("parametre/courbe");
+		}
+		else{
+			for($i=0;$i<count($data['mois']) AND count($data['poidsMax']) AND count($data['poidsMin']);$i++){
+				$verif = $this->md_parametre->verif_element_courbe(ucfirst(trim($data['mois'][$i])));
+				if(!$verif){
+					$donnees = array(
+					"cou_iSta"=>1,
+					"cou_iMois"=>ucfirst(trim($data['mois'][$i])),
+					"cou_fPoidsMax"=>ucfirst(trim($data['poidsMax'][$i])),
+					"cou_fPoidsMin"=>ucfirst(trim($data['poidsMin'][$i])),
+					"cou_dDate"=>date("Y-m-d")
+					);
+					$this->md_parametre->ajout_courbe($donnees);
+					$log = array(
+						"log_iSta"=>0,
+						"per_id"=>$this->md_config->get_session(),
+						"log_sTable"=>"t_courbe_cou",
+						"log_sIcone"=>"Courbe de croissance",
+						"log_sAction"=>"a ajouté une valeur dans la courbe de croissance",
+						"log_sActionDetail"=>"a ajouté une nouvelle valeur dans la courbe de croissance",
+						"log_dDate"=>date("Y-m-d H:i:s")
+					);
+					$this->md_connexion->rapport($log);
+				}
+			}		
+		}
+	}
+	
+	
+	
+	public function supprimer_element_courbe($id){
+		date_default_timezone_set('Africa/Brazzaville');
+		if(!isset($id)){
+			return redirect("parametre/courbe");
+		}
+		else{
+			$donnees = array(
+				"cou_iSta"=>2
+			);
+			
+			$supprimer = $this->md_parametre->maj_courbe($donnees,$id);
+			
+			if($supprimer){
+				$log = array(
+					"log_iSta"=>0,
+					"per_id"=>$this->md_config->get_session(),
+					"log_sTable"=>"t_courbe_cou",
+					"log_sIcone"=>"Courbe de croissance",
+					"log_sAction"=>"a supprimer une valeur dans la courbe de croissance",
+					"log_sActionDetail"=>"a ajouté une nouvelle valeur dans la courbe de croissance",
+					"log_dDate"=>date("Y-m-d H:i:s")
+				);
+				$this->md_connexion->rapport($log);
+				return redirect("parametre/courbe");
+			}
+		}
+	}
+	
+	public function modifierCourbe(){
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+		if(!isset($data)){
+			return redirect("parametre/courbe");
+		}
+		else{
+			$donnees = array(
+				"cou_fPoidsMax"=>$data['poidsmax'],
+				"cou_fPoidsMin"=>$data['poidsmin']
+			);
+			
+			$supprimer = $this->md_parametre->maj_courbe($donnees,$data['id']);
+			
+			if($supprimer){
+				$log = array(
+					"log_iSta"=>0,
+					"per_id"=>$this->md_config->get_session(),
+					"log_sTable"=>"t_courbe_cou",
+					"log_sIcone"=>"Courbe de croissance",
+					"log_sAction"=>"a modifé une valeur dans la courbe de croissance",
+					"log_sActionDetail"=>"a modifé une nouvelle valeur dans la courbe de croissance",
+					"log_dDate"=>date("Y-m-d H:i:s")
+				);
+				$this->md_connexion->rapport($log);
+				echo ucfirst(trim($data['poidsmax'])).'-/-'.ucfirst(trim($data['poidsmin']));
+			}
+		}
+	}
+	
+	
+	
 	
 	public function supprimer_compte_sous_fonct($id){
 		date_default_timezone_set('Africa/Brazzaville');

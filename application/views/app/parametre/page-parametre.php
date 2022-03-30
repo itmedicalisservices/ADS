@@ -137,7 +137,17 @@
                         <div class="number"><?php echo count($this->md_parametre->liste_forme_produit_actifs());?></div>
                     </div>
                 </div>
-            </div>			
+            </div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="info-box-4 hover-zoom-effect">
+                    <div class="icon"><a href="<?php echo site_url("pharmacie/liste_produit");?>"><i class="zmdi zmdi-settings col-blue-grey"></i><br>Administrer</a></div>
+                    <div class="content">
+                        <div class="text">Produits</div>
+                        <div class="number"><?php echo count($this->md_pharmacie->liste_medicament2());?></div>
+                    </div>
+                </div>
+            </div>	
 			
 			<div class="col-lg-4 col-md-4 col-sm-6">
                 <div class="info-box-4 hover-zoom-effect">
@@ -461,7 +471,18 @@
                         <div class="number"><?php echo $this->md_smi->nb_vaccin_info()->nb;?></div>
                     </div>
                 </div>
-            </div>  
+            </div>
+			
+			<div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="info-box-4 hover-zoom-effect">
+                    <div class="icon"><a href="<?php echo site_url("parametre/courbe");?>"><i class="zmdi zmdi-settings col-blue-grey"></i><br>Administrer</a></div>
+                    <div class="content">
+                        <div class="text">Courbe de référence de croissance d'un enfant</div>
+                        <div class="number"><?php echo $this->md_smi->nb_vaccin_info()->nb;?></div>
+                    </div>
+                </div>
+            </div>
+			
 			<!--<div class="col-lg-4 col-md-4 col-sm-6">
                 <div class="info-box-4 hover-zoom-effect">
                     <div class="icon"><a href="<?php //echo site_url("parametre/new_banque");?>"><i class="zmdi zmdi-settings col-blue-grey"></i><br>Administrer</a></div>

@@ -1007,6 +1007,79 @@ $(".editDomaineAnnule").click(function(){
 
 
 
+/** Courbe de croissance ***/
+$(".editCourbe").click(function(){
+	var rel=$(this).attr('rel');
+	$(".input_poidsmax"+rel).removeClass('cacher');
+	$(".input_poidsmin"+rel).removeClass('cacher');
+	$(".confirm_cou"+rel).removeClass('cacher');
+	$(".annule_cou"+rel).removeClass('cacher');
+	$(".champs_poidsmax"+rel).addClass('cacher');
+	$(".champs_poidsmin"+rel).addClass('cacher');
+	$(this).addClass('cacher');
+	return false;
+});
+
+$(".editCourbeFinal").click(function(){
+	var rel=$(this).attr('rel');
+	var data1 = $('form#form-edit-poidsmin'+rel).serialize();
+	var data2 = $('form#form-edit-poidsmax'+rel).serialize();
+		// alert(data1);
+		// alert(data2);
+		$.ajax({
+			type:"POST",
+			url: modifierCourbe,
+			data:data1+data2,
+			async:true,
+			error:function(xhr, status, error){
+				alert(xhr.responseText);
+			}	
+		})
+		.done(function(retour){
+			// alert(retour);
+			if(retour == "echec"){
+				$(".input_poidsmax"+rel).addClass('cacher');
+				$(".input_poidsmin"+rel).addClass('cacher');
+				$(".annule_cou"+rel).addClass('cacher');
+				$(".clique_cou"+rel).removeClass('cacher');
+				$(".champs_poidsmax"+rel).removeClass('cacher');
+				$(".champs_poidsmin"+rel).removeClass('cacher');
+				$(".confirm_cou"+rel).addClass('cacher');
+			}
+			else{
+				var tabRetour = retour.split("-/-");
+				
+				$(".champs_poidsmax"+rel).html(tabRetour[0]+" Kg");
+				$(".champs_poidsmin"+rel).html(tabRetour[1]+" Kg");
+				$(".input_poidsmax"+rel).addClass('cacher');
+				$(".input_poidsmin"+rel).addClass('cacher');
+				$(".annule_cou"+rel).addClass('cacher');
+				$(".clique_cou"+rel).removeClass('cacher');
+				$(".champs_poidsmin"+rel).removeClass('cacher');
+				$(".champs_poidsmax"+rel).removeClass('cacher');
+				$(".confirm_cou"+rel).addClass('cacher');
+
+			}
+		});
+	
+	return false;
+});
+
+$(".editCourbeAnnule").click(function(){
+	var rel=$(this).attr('rel');
+	$(".input_poidsmax"+rel).addClass('cacher');
+	$(".input_poidsmin"+rel).addClass('cacher');
+	$(".confirm_cou"+rel).addClass('cacher');
+	$(".clique_cou"+rel).removeClass('cacher');
+	$(".champs_poidsmax"+rel).removeClass('cacher');
+	$(".champs_poidsmin"+rel).removeClass('cacher');
+	$(this).addClass('cacher');
+	return false;
+});
+
+
+
+
 /** Assureur ***/
 $(".editAssureur").click(function(){
 	var rel=$(this).attr('rel');

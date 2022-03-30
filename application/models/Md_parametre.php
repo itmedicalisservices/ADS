@@ -102,6 +102,7 @@ class Md_parametre extends CI_Model {
 	protected $tableCla = "armee.t_classe_maladie_cla";
 	protected $tableSm1 = "armee.t_sous_maladie_niveau1_sm1";
 	protected $tableSm2 = "armee.t_sous_maladie_niveau2_sm2";
+	protected $tableCou = "armee.t_courbe_cou";
 	
 	//RABY
 	
@@ -2025,8 +2026,36 @@ class Md_parametre extends CI_Model {
 		->where("pas_iSta",0)
 		->update($this->tablePas,$donnees);	
 	}
+	
+	
+	
 
 	
+	
+	/***** Courbe de croissance*********/
+	public function recup_courbe()
+	{
+		return $this->db
+		->where("cou_iSta",1)
+		->order_by("cou_iMois","asc")
+		->get($this->tableCou)->result();
+	}
+	
+	public function verif_element_courbe($mois)
+	{
+		return $this->db
+		->where("cou_iSta",1)
+		->where("cou_iMois",$mois)
+		->get($this->tableCou)->row();
+	}	
+	
+	public function ajout_courbe($donnees){
+		return $this->db->insert($this->tableCou,$donnees);
+	}
+	
+	public function maj_courbe($donnees,$id){
+		return $this->db->where("cou_id",$id)->update($this->tableCou,$donnees);
+	}
 	
 	/***** Cession*********/
 	
