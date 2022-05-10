@@ -630,5 +630,6 @@
 		
 		
 		var recupQuantite = <?php echo json_encode(site_url('pharmacie/recupQuantite')); ?>;
+		var pharmacie = <?php echo json_encode(site_url('pharmacie')); ?>;
 		//RABY
 	</script>

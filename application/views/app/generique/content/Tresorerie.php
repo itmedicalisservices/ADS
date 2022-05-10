@@ -157,15 +157,15 @@
 						<div class="card">
 							<div class="header">	
 								<h2>liste des produits (<?php echo count($listeOrd); ?>)<?php if($user->per_iCnx===0){?><button id="factureOrd" type="button" class="btn bg-blue-grey waves-effect pull-right cacher" style="color:#fff"><i class="fa fa-check"></i> <b>Faire une facture</b></button><?php }?></h2>
-								<br><br><input type="text" name="search" id="search" placeholder="Recherche ..." style="width:30%;padding-left:1%;margin-left:1%" oninput="recherche_element_caisse1()" />
-								<a style="margin:0px" rel="" href="javascript:();" class="btn btn-sm waves-effect bg-blue-grey" id="" onclick="recherche_element_caisse()"><i class="fa fa-search" ></i></a>
+								<!--<br><br><input type="text" name="search" id="search" placeholder="Recherche ..." style="width:30%;padding-left:1%;margin-left:1%" oninput="recherche_element_caisse1()" />
+								<a style="margin:0px" rel="" href="javascript:();" class="btn btn-sm waves-effect bg-blue-grey" id="" onclick="recherche_element_caisse()"><i class="fa fa-search" ></i></a>-->
 							<?php  //var_dump($this->md_config->get_session(),$this->session->itmedicalis);?>
 							<?php //var_dump(date("Y-m-d H:i:s"));?>
 							
 							</div>
 							<div class="body table-responsive" style="overflow:auto;height:500px">
 								<form id="form-factureOrd">
-									<table  class="table table-bordered table-striped table-hover">
+									<table id="example8"  class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
 												<th>#</th>

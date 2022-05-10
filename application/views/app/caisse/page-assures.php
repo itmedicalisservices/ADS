@@ -204,8 +204,8 @@
 									<th ></th>
 									<th ><strong><?php echo $Total; ?> FCFA</strong></th>
 									<th ><strong> <?php echo $Total1; ?> FCFA</strong></th>
-									<th ><strong><?php echo $Total2; ?> FCFA</strong></th>
 									<th ><strong><?php echo $Total3; ?> FCFA</strong></th>
+									<th ><strong><?php echo $Total2; ?> FCFA</strong></th>
 									<th ><strong><?php echo $Total4; ?> FCFA</strong></th>
 									<th ></th>
 									<th ></th>

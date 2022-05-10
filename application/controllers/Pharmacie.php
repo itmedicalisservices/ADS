@@ -1092,6 +1092,7 @@ class Pharmacie extends CI_Controller {
 				"log_dDate"=>date("Y-m-d H:i:s")
 			);
 			$this->md_connexion->rapport($log);
+			echo 'ok';
 		}else{
 			echo 'Le nombre de medicament que vous voulez dispenser un inférieur à la quantité demandée';
 		}

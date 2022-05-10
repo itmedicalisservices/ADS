@@ -30,6 +30,7 @@ $info = $this->md_parametre->info_structure();
 			<table class="table" style="width:100%;padding-top:100px;clear:both;" align="right" cellspacing="0" border="1">
 				
 				<tr>
+					<th>Acte</th>
 					<th>Assureur</th>
 					<th>Type d'assurance</th>
 					<th>Patient</th>
@@ -43,6 +44,7 @@ $info = $this->md_parametre->info_structure();
 				<?php $liste=$this->md_patient->Impression_recouvrement_assurance($Tab[$i]); ?>
 						<?php $montant +=$liste->fac_iMontantAss; ?>
 						<tr >
+							<td><?php echo $liste->lac_sLibelle;?></td>
 							<td><?php echo $liste->ass_sLibelle;?></td>
 							<td><?php echo $liste->tas_iTaux;?>%</td>
 							<td><?php echo $liste->pat_sNom." ".$liste->pat_sPrenom;?></td>

@@ -62,7 +62,29 @@
 										//} ?> href="<?php// echo site_url("facture/liste"); ?>">Factures annulées</a>
 								</li>-->
 							</ul>
-						</li>									
+						</li>
+						<li class="<?php if ($sousPage == "recu_caisse" or $sousPage == "recu_caisse_bon" or $sousPage == "recu_caisse_impaye" or $sousPage == "recu_caisse_assure" or $sousPage == "recu_caisse_non_assure" ) {
+										echo "active";
+									} ?>"><a href="javascript:void(0);" class="menu-toggle"><i class="fa fa-dollar"></i><span>Facture Pharmacie</span> </a>
+							<ul class="ml-menu">
+								
+								<li><a <?php if ($page == "pharmacie" and $sousPage == "recu_caisse") {
+											echo "style='color:#fff'";
+										} ?> href="<?php echo site_url("pharmacie/recu_caisse"); ?>">Facture de caisse</a></li>
+								<li><a <?php if ($page == "pharmacie" and $sousPage == "recu_caisse_non_assure") {
+											echo "style='color:#fff'";
+										} ?> href="<?php echo site_url("pharmacie/recu_caisse_non_assure"); ?>">Factures non assurées</a></li>
+								<li><a <?php if ($page == "pharmacie" and $sousPage == "recu_caisse_assure") {
+											echo "style='color:#fff'";
+										} ?> href="<?php echo site_url("pharmacie/recu_caisse_assure"); ?>">Factures par assurance</a></li>
+								<li><a <?php if ($page == "pharmacie" and $sousPage == "recu_caisse_bon") {
+											echo "style='color:#fff'";
+										} ?> href="<?php echo site_url("pharmacie/recu_caisse_bon"); ?>">Factures par bon</a></li>
+								<li><a <?php if ($page == "pharmacie" and $sousPage == "recu_caisse_impaye") {
+											echo "style='color:#fff'";
+										} ?> href="<?php echo site_url("pharmacie/recu_caisse_impaye"); ?>">Factures impayées</a></li>
+							</ul>
+						</li>
 						<li class="<?php if ($sousPage == "journal_encaissement") {
 									echo "active";
 								} ?>"><a href="<?php echo site_url("caisse/journal_encaissement"); ?>"><i class="fa fa-file"></i><span>Jrnl. caisse/encaiss.</span><span style="background:red;color:white" class="label-count" id=""></span></a>

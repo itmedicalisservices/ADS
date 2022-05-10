@@ -3083,8 +3083,11 @@ class Md_patient extends CI_Model {
 	public function liste_recouvrement_assuranceTous($ass)
 	{
 		return $this->db
-		->select("ass_sLibelle,tas_iTaux,pat_sNom,pat_sPrenom,fac_iMontantAss,fac_dDatePaie,fac_iSituationAss,fac_id")
+		->select("lac_sLibelle,ass_sLibelle,tas_iTaux,pat_sNom,pat_sPrenom,fac_iMontantAss,fac_dDatePaie,fac_iSituationAss,".$this->tableFac.".fac_id")
 		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableFac.'.pat_id ','inner')
+		->join($this->tableElf, $this->tableElf.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->join($this->tableAcm, $this->tableAcm.'.acm_id ='.$this->tableElf.'.acm_id ','inner')
+		->join($this->tableLac, $this->tableLac.'.lac_id ='.$this->tableAcm.'.lac_id ','inner')
 		->join($this->tableAss, $this->tableAss.'.ass_id ='.$this->tableFac.'.ass_id ','inner')
 		->join($this->tableTas, $this->tableTas.'.tas_id ='.$this->tableFac.'.tas_id ','inner')
 		->where($this->tableFac.".ass_id",$ass)
@@ -3097,8 +3100,11 @@ class Md_patient extends CI_Model {
 	public function Impression_recouvrement_assurance($id)
 	{
 		return $this->db
-		->select("ass_sLibelle,tas_iTaux,pat_sNom,pat_sPrenom,fac_iMontantAss,fac_dDatePaie,fac_iSituationAss,fac_id")
+		->select("lac_sLibelle,ass_sLibelle,tas_iTaux,pat_sNom,pat_sPrenom,fac_iMontantAss,fac_dDatePaie,fac_iSituationAss,".$this->tableFac.".fac_id")
 		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableFac.'.pat_id ','inner')
+		->join($this->tableElf, $this->tableElf.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->join($this->tableAcm, $this->tableAcm.'.acm_id ='.$this->tableElf.'.acm_id ','inner')
+		->join($this->tableLac, $this->tableLac.'.lac_id ='.$this->tableAcm.'.lac_id ','inner')
 		->join($this->tableAss, $this->tableAss.'.ass_id ='.$this->tableFac.'.ass_id ','inner')
 		->join($this->tableTas, $this->tableTas.'.tas_id ='.$this->tableFac.'.tas_id ','inner')
 		->where($this->tableFac.".fac_id",$id)
@@ -5234,7 +5240,7 @@ class Md_patient extends CI_Model {
 					->where("fac.fac_iMontantAss !=",0)
 					->where("fac.fac_dDatePaie >=",$debut)
 					->where("fac.fac_dDatePaie <=",$fin)
-					->where("fac.fac_sObjet","Paiement des actes médicaux")
+					//->where("fac.fac_sObjet","Paiement des actes médicaux")
 					->where("fac_iSta",1)
 					->where("fac_iSituationAss",0)
 					->group_by("ass.ass_sLibelle")/*Ajout*/
@@ -5248,7 +5254,7 @@ class Md_patient extends CI_Model {
 					->join($this->tableAss." ass","ass.ass_id=fac.ass_id")
 					->where("fac.fac_iMontantAss !=",0)
 					->where("fac.fac_dDatePaie <=",$fin)
-					->where("fac.fac_sObjet","Paiement des actes médicaux")
+					//->where("fac.fac_sObjet","Paiement des actes médicaux")
 					->where("fac_iSta",1)
 					->where("fac_iSituationAss",0)
 					->group_by("ass.ass_sLibelle")/*Ajout*/

@@ -42,7 +42,7 @@
 									</td>
 									
 									<td class="text-center">
-										<a  href="<?=site_url("pharmacie/dispenser/".$l->fac_id."/".$l->med_id);?>" class="btn bg-blue-grey waves-effect pull-right" style="color:#fff"> <b>Faire une facture</b></button>
+										<a  href="<?=site_url("pharmacie/dispenser/".$l->fac_id."/".$l->med_id);?>" class="btn bg-blue-grey waves-effect pull-right" style="color:#fff"> <b>DISPONSER</b></button>
 									</td>
 								</tr>
 							<?php } ?>

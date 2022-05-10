@@ -73,6 +73,10 @@ class Caisse extends CI_Controller {
 	{
 		$this->load->view('app/caisse/page-recouvrement-assurance',array("ass"=>$id));
 	}
+	public function recouvrementAssurancePatient($id)
+	{
+		$this->load->view('app/caisse/page-recouvrement-assurance-patient',array("ass"=>$id));
+	}
 	
 	//RABY
 	public function recouvrementPatient($id)
@@ -258,12 +262,30 @@ class Caisse extends CI_Controller {
 			$data['montantPaye'] = $data['montantTotal'];
 			
 		}elseif($data['typePaie']=='assurance'){
-			$tas = $data['tas'];
+			$tas = explode("-/-",$data['tas'])[0];
 			$ass= $data['ass'];
 			$bph= NULL;
 			$reste= $data['montantTotal'] - ($data['montantPaye'] + $data['montantAss']);
 			$montantAss = $data['montantAss'];
 		}
+		
+		/*$tab = explode('-/-', $data["acte"]);
+
+		if($tab[2] == 'NON'){$Prsct = NULL;}else{if($data["medPrst"] == ""){$Prsct = NULL;}else{$Prsct = $data["medPrst"];};}*/
+		$donnees = array(
+			"acm_iSta"=>2,
+			"lac_id"=>2169,/*Acte Achat de medicament*/
+			"pat_id"=>$data['pat'],
+			"uni_id"=>168,/*Unite pharmacie hospitaliere*/
+			"acm_iHos"=>0,
+			"acm_iFin"=>0,
+			"recep_iPer"=>0,
+			"acm_iDivers"=>0,/*Pour recupérer le dernier frais divers*/
+			"acm_dDate"=>date("Y-m-d H:i:s"),
+			"acm_dDateDelai"=>NULL
+		);
+		$insert = $this->md_patient->ajout_orientation($donnees);
+		
 		
 		$donnees = array(
 			'per_id'=>$this->session->armee,
@@ -283,12 +305,13 @@ class Caisse extends CI_Controller {
 		);
 		$insert = $this->md_patient->ajout_facture($donnees);
 		
-		
+		$recuplastact = $this->md_parametre->recup_last_acte_medical();
 		for($i=0; $i<count($data['qte']) AND $i<count($data['idAch']);$i++){
 			
 			$tabDonnees = array(
 				'fac_id'=>$insert,
 				'ach_id'=>$data['idAch'][$i],
+				'acm_id'=>$recuplastact->acm_id,
 				'elf_iSta'=>1,
 				'elf_iQte'=>$data['qte'][$i],
 				'elf_iCout'=>$data['cout'][$i],

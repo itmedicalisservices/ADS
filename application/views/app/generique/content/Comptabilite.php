@@ -117,7 +117,20 @@
 						</div>
                     </div>
                 </div>
-            </div>			
+            </div>
+			<!--<div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="info-box-4 hover-zoom-effect bg-blue-grey">
+                    <div class="icon"> </div>
+                    <div class="content">
+						<div class="icon"><a href="<?=site_url("patient/liste/");?>" class=""> <i class="fa fa-arrow-right"></i></a> </div>
+                        <div class="text">Recouvrement facture assurer par patient</div>
+                        <div class="number">
+							<?php echo number_format($mtAssurance ,0,",","."); ?> <small>FCFA</small>
+						</div>
+                    </div>
+                </div>
+            </div>-->
+			
 			<?php //RABY?>
            
 			 <div class="col-lg-6 col-md-6 col-sm-6">

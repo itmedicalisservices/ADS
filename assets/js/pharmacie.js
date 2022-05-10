@@ -193,7 +193,10 @@ $(".vendre2").click(function(){
 			// alert(retour);
 			// $("#tbody").html("");
 			// $("#tfooter").val("");
-			location.reload(true);
+			if(retour =="ok"){
+				document.location.href=pharmacie;
+			}
+			
 		});
 	}
 	else{

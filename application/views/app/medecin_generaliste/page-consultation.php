@@ -884,7 +884,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 																						</div>
 																					</td>
 																					<td style="padding:0;width:10%;">
-																						<input type="text" min="1" readonly id="stock" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																						<input type="number"  id="stock" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
 																					</td>
 																					<td style="padding:0;width:10%;">
 																						<input type="number" min="1" id="qte" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
@@ -1720,13 +1720,15 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
             var dosage 	            = document.getElementById('dosage').value;
             var typeRenew 	        = document.getElementById('typeRenew').value;
             var typeFreq 	        = document.getElementById('typeFreq').value;
-			// alert(qte);
+			
+			alert(stock);
+			alert(qte);
 			if(med !="autre"){
 				if(med == '' || qte == ''|| duree == ''|| pos == ''|| typeRenew == ''|| typeFreq == '') {
 					alert('Veuillez renseigner le champs.');	
 				}
 				else {
-					if(qte <= stock){
+					if(parseInt(qte) <= parseInt(stock)){
 						var contact = new Object();
 						contact.med	       	    = med;
 						contact.qte	    		= qte;
@@ -1790,7 +1792,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 				tabMed =annuaire[i].med.split("-/-");
 				alert(tabMed[1]);
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="medid[]" value="'+ tabMed[0]+'"/><input type="hidden" name="med[]" value="'+ tabMed[1]+'"/>' +tabMed[1] + '</td>';
+                contenu += '<td colspan="2"><input type="hidden" name="medid[]" value="'+ tabMed[0]+'"/><input type="hidden" name="med[]" value="'+ tabMed[1]+'"/>' +tabMed[1] + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + '</td>';
