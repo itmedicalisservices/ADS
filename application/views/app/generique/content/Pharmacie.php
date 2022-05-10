@@ -2,7 +2,7 @@
 <?php $liste = $this->md_pharmacie->liste_entrees(); ?>
 <?php $listeassurance = $this->md_parametre->liste_assureurs_actifs(); ?>
 <?php $listetype = $this->md_parametre->liste_type_couverture_assurance_actifs(); ?>
-
+<?php $listeRE = $this->md_pharmacie->liste_recu_caisse2(); ?>
 
 <section class="content">
     <div class="container-fluid">
@@ -14,10 +14,43 @@
             <div class="col-lg-12 col-md-12 col-sm-12">
 				<div class="card">
                     <div class="header">
-                        <h2>Effectuez une vente</h2>
+                        <h2>Disponsation des medicaments</h2>
                         <?php //var_dump($liste); ?>
                     </div>
-                    <div class="body table-responsive">
+					<div class="body table-responsive"> 
+						<table id="example" class="table table-bordered table-striped table-hover" style="font-size:12px">
+							<thead>
+								<tr>
+									<th>Produit</th>
+									<th>Quantité</th>
+									<th>Patient</th>
+									<th style="width:60px">Action</th>
+								</tr>
+							</thead>
+						   
+							<tbody>
+							<?php foreach($listeRE AS $l){ ?>
+								<tr>
+									<td>
+										<?php echo $l->med_sNc." ".$l->for_sLibelle; ?>
+									</td>
+									<td>
+										<?php echo $l->elf_iQte; ?>
+									</td>
+									<td>
+										<?php echo $l->pat_sNom." ".$l->pat_sPrenom; ?>
+									</td>
+									
+									<td class="text-center">
+										<a  href="<?=site_url("pharmacie/dispenser/".$l->fac_id."/".$l->med_id);?>" class="btn bg-blue-grey waves-effect pull-right" style="color:#fff"> <b>Faire une facture</b></button>
+									</td>
+								</tr>
+							<?php } ?>
+							</tbody>
+						</table>
+                    </div>
+					
+                    <!--<div class="body table-responsive">
 						<form id="form-vendre">
 							<div id="reception"></div>
 							<table class="table table-bordered table-striped table-hover">
@@ -102,10 +135,37 @@
 							</table>
 						</form>
 						<a href="javascript:();" class="btn btn-success waves-effect vendre pull-right" style="color:#fff"><i class="fa fa-check"></i> Valider</a>
-                    </div>
-                </div>
+                    </div>-->
+                
+				</div>
 			</div>
         </div>
 		<button style="display:none" type="button" class="btn bg-blue-grey waves-effect finish" id="finish">BLUE GREY</button>
     </div>
 </section>
+
+<div class="modal fade" id="modalDisponser" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" style="margin-top:5px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel"></h4>
+            </div>
+			<form action="" method="POST" id="form-caisse" style="border:1px solid black; margin-top:-30px">
+				<div class="modal-body" style="max-height:600px; overflow:auto;">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="card">
+							<div class="body table-responsive">
+								<div class="col-md-12" id="recepDisponser"></div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="modal-footer">
+					<button id="btn-encaiss" onclick="this.style.display='none'" type="submit" class="btn btn-success waves-effect " id="disponser" style="color:#fff"><i class="fa fa-check"></i> Encaisser</button>
+					<button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Fermer</button>
+				</div>
+			</form>
+        </div>
+    </div>
+</div>

@@ -1237,6 +1237,11 @@ class Consultation extends CI_Controller {
 			echo "erreur";
 		}
 		else{
+			//à voir demain
+			/*for($i=0;$i<count($data['med']) AND $i< count($data['qte']);$i++){
+				$this->md_patient->recup_element_ordonnance_Achat($data['med'][$i],$data['qte'][$i]);
+			}*/
+			
 			$verif = $this->md_patient->verif_sejour($data["id"],date("Y-m-d"));
 			if(!$verif){
 				$donneesSejour = array(
@@ -1271,8 +1276,10 @@ class Consultation extends CI_Controller {
 				for($i=0;$i<count($data['med']) AND $i< count($data['qte']) AND $i< count($data['duree']) AND $i< count($data['pos']) AND $i< count($data['renew']) AND $i< count($data['freq']);$i++){
 		
 					$verif = $this->md_patient->verif_element_ordonnance($ajout->ord_id,$data['med'][$i],$data['qte'][$i],$data['duree'][$i],$data['pos'][$i],$data['renew'][$i],$data['freq'][$i]);
+					if($data['medid'][$i]== ""){$data['medid'][$i] =NULL;}
 					if(!$verif){
 						$donnees = array(
+						"elo_iSta"=>1,
 						"elo_sProduit"=>$data['med'][$i],
 						"elo_sPosologie"=>$data['pos'][$i],
 						"elo_iDuree"=>$data['duree'][$i],
@@ -1280,6 +1287,7 @@ class Consultation extends CI_Controller {
 						"elo_sFreq"=>$data['freq'][$i],
 						"elo_sOuvert"=>NULL,
 						"ord_id"=>$ajout->ord_id,
+						"med_id"=>$data['medid'][$i],
 						"elo_iQuantite"=>$data['qte'][$i]
 						);
 						$this->md_patient->ajout_element_ordonnance($donnees);

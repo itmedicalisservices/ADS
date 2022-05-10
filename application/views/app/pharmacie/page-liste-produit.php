@@ -1,6 +1,6 @@
 ﻿
 <?php include(dirname(__FILE__) . '/../includes/header.php'); ?>
-<?php $liste = $this->md_pharmacie->liste_medicament(); ?>
+<?php $liste = $this->md_pharmacie->Liste_medicaments(); ?>
 
 <?php $listeFam = $this->md_parametre->liste_famille_produit_actifs(); ?>
 <?php $listeCat = $this->md_parametre->liste_categorie_produit_actifs(); ?>
@@ -25,10 +25,8 @@
 							<thead>
 								<tr>
 									<th>Nom commercial</th>
-									<th>Nom scientifique</th>
 									<th>Caractéristiques</th>
-									<th>Catégorie</th>
-									<th>Famille</th>
+									<th>Conditionement</th>
 									<?php //var_dump($liste)?>
 									<th style="width:60px">Action</th>
 								</tr>
@@ -37,10 +35,8 @@
 							<?php foreach($liste AS $l){ ?>
 								<tr>
 									<th class="text-success"><?=$l->med_sNc;?></th>
-									<td><?php if(!is_null($l->med_sNs)){echo $l->med_sNs;}else{echo "<i class='text-danger' style='font-size:11px'>Non renseigné</i>";}?></td>
 									<td><?=$l->for_sLibelle." ".$l->med_iDosage.$l->med_sUnite;?></td>
-									<td><?=$l->cat_sLibelle;?></td>
-									<td><?=$l->fam_sLibelle;?></td>
+									<td><?=$l->med_sConditionment;?></td>
 									<td class="text-center">
 										<a href="<?php echo site_url("pharmacie/modifier_produit/".$l->med_id); ?>" class="delete" title="modifier"><i class="fa fa-edit text-success" style="font-size:20px"></i></a>&nbsp;&nbsp;
 										<a onClick="return confirm('Êtes-vous sûr de supprimer ce produit ?')" href="<?php echo site_url("pharmacie/supprimer_produit/".$l->med_id); ?>" class="delete" title="Supprimer"><i class="zmdi zmdi-delete text-danger" style="font-size:20px"></i></a>&nbsp;&nbsp;
@@ -79,54 +75,39 @@
 									<thead>
 										<tr>
 											<th style="">Nom commercial *</th>
-											<th style="">Nom scientifique</th>
-											<th style="">Dosage *</th>
-											<th style="">Unité *</th>
+											<th style="">Dosage </th>
+											<th style="">Unité </th>
 										</tr>
 										<tr>
 											<td>
-												<input type="text" name="nc" class="obligatoire" placeholder=""/>
+												<input type="text" name="nc" class="obligatoire" placeholder="" style="width:100%;" />
 											</td>
+													
 											<td>
-												<input type="text" name="ns"  class="" placeholder=""  style=""/>
+												<input type="number" min="0"  class="" name="dos" placeholder=""  style="width:100%;"/>
 											</td>			
 											<td>
-												<input type="number" min="0"  class="obligatoire" name="dos" placeholder=""  style=""/>
-											</td>			
-											<td>
-												<input type="text" class="obligatoire" name="uni" placeholder=""  style=""/>
+												<input type="text" class="" name="uni" placeholder=""  style="width:100%;" />
 											</td>
 										</tr>										
 										<tr>
-											<th style="">Catégorie *</th>
-											<th colspan="2" style="">Famille *</th>
-											<th style="">Forme *</th>
+											
+											<th >Forme *</th>
+											<th colspan="2">Conditionement *</th>
 										</tr>
 										<tr>
 											<td>	
-												<select name="cat" id="cat" class="form-control obligatoire"   style="">
-													<option value="">-- Catégorie * --</option>
-													<?php foreach($listeCat AS $listeCats){?>
-													<option value="<?php echo $listeCats->cat_id ?>-/-<?php echo $listeCats->cat_sLibelle?>"><?php echo $listeCats->cat_sLibelle?></option>
-													<?php }?>
+												<select name="fors" id="fors" class=" obligatoire" style="width:100%; height:30px;">
+													<option value="">-- Forme * --</option>
+													<?php foreach($listeFor AS $listeFors){ ?>
+													<option value="<?php echo $listeFors->for_id ;?>"><?php echo $listeFors->for_sLibelle?></option>
+													<?php } ?>
 												</select>
 											</td>
 											<td colspan="2">
-												<select name="fam" id="fam" class="form-control obligatoire"   style="">
-													<option value="">-- Famille * --</option>
-													<?php foreach($listeFam AS $listeFams){?>
-													<option value="<?php echo $listeFams->fam_id ;?>-/-<?php echo $listeFams->fam_sLibelle; ?>"><?php echo $listeFams->fam_sLibelle?></option>
-													<?php }?>
-												</select>
-											</td>			
-											<td>
-												<select name="fors" id="fors" class="form-control obligatoire">
-													<option value="">-- Forme * --</option>
-													<?php foreach($listeFor AS $listeFors){?>
-													<option value="<?php echo $listeFors->for_id ;?>-/-<?php echo $listeFors->for_sLibelle; ?>"><?php echo $listeFors->for_sLibelle?></option>
-													<?php }?>
-												</select>
-											</td>
+												<input type="text" class="obligatoire" name="condi" placeholder=""  style="width:100%;"/>
+											</td>	
+											
 										</tr>
 									</thead>
 								 </table>	

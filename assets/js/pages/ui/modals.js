@@ -1923,6 +1923,25 @@ $(function () {
     });
 });
 
+$(function () {
+    $('.disponser').on('click', function () {
+        var color = $(this).data('color');
+		var paye=$(this).attr("rel");
+        $('#modalDisponser .modal-content').removeAttr('class').addClass('modal-content modal-col-' + color);
+        $('#modalDisponser').modal('show');
+    });
+});
+
+
+$(function () {
+    $('#factureOrd').on('click', function () {
+        var color = $(this).data('color');
+		var paye=$(this).attr("rel");
+        $('#modalPayeOrd .modal-content').removeAttr('class').addClass('modal-content modal-col-' + color);
+        $('#modalPayeOrd').modal('show');
+    });
+});
+
 
 $(function () {
     $('#facture_2').on('click', function () {
@@ -2471,5 +2490,8 @@ $('#mdModalPatientComplet').on('hidden.bs.modal', function () {
 });
 
 $('#modalPaye').on('hidden.bs.modal', function () {
+	location.href=listeAct;
+});
+$('#modalPayeOrd').on('hidden.bs.modal', function () {
 	location.href=listeAct;
 });

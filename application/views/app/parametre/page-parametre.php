@@ -478,7 +478,7 @@
                     <div class="icon"><a href="<?php echo site_url("parametre/courbe");?>"><i class="zmdi zmdi-settings col-blue-grey"></i><br>Administrer</a></div>
                     <div class="content">
                         <div class="text">Courbe de référence de croissance d'un enfant</div>
-                        <div class="number"><?php echo $this->md_smi->nb_vaccin_info()->nb;?></div>
+                        <div class="number"></div>
                     </div>
                 </div>
             </div>

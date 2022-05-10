@@ -14,7 +14,7 @@
 						
 						<div class="card">
 							<div class="header">
-								<h2>Gestion de mes patients  <?php var_dump($user->uni_id,$user->ser_id);?></h2>
+								<h2>Gestion de mes patients</h2>
 							
 							</div>
 							<div class="body table-responsive">

@@ -169,6 +169,41 @@ $(".vendre").click(function(){
 });
 
 
+$(".vendre2").click(function(){
+	// alert();
+	var nbError = 0;
+	var tab = $("#tbody").html();
+	
+	if($.trim(tab)==""){
+		nbError++;
+	}
+	if(nbError == 0){
+		var data = $('form#form-vendre').serialize();
+		// alert(data);
+		$.ajax({
+			type:"POST",
+			url: effectuerVente2,
+			data:data,
+			async:true,
+			error:function(xhr, status, error){
+				alert(xhr.responseText);
+			}	
+		})
+		.done(function(retour){
+			// alert(retour);
+			// $("#tbody").html("");
+			// $("#tfooter").val("");
+			location.reload(true);
+		});
+	}
+	else{
+		alert("Veuillez verifier que la liste des produits et le montant payé soient bien renseignés !");
+	}
+	
+	return false;
+});
+
+
 
 
 $("#editentreeStock").click(function(){
@@ -360,7 +395,7 @@ $(".addProduit").click(function(){
 			
 		})
 		.done(function(retour){
-			// alert(retour);
+			 alert(retour);
 				$("#finish").click();
 				$("#largeModal").modal("hide");
 				$("div.refresh").html("<meta http-equiv='refresh' content='2'>");
@@ -595,7 +630,7 @@ $("#editProduit").click(function(){
 			
 		})
 		.done(function(retour){
-			// alert(retour);
+			 alert(retour);
 			if(retour == "erreur"){	
 				$(".retour").addClass("alert alert-danger").html("Un produit avec les mêmes caractéristiques existe déjà !").removeClass("success");
 				$("form#form-edit-produit .deja").parent("div").addClass("has-error");
@@ -1174,6 +1209,33 @@ $("#addFictif").click(function(){
 			}
 			
 		});
+	
+	
+	return false;
+});
+
+$(".selectProduit").change(function(){
+	 var id = $(this).val();
+		if(id !=""){
+			$.ajax({
+				type:"POST",
+				url: recupQuantite,
+				data:"id="+id.split('-/-')[0],
+				async:true,
+				error:function(xhr, status, error){
+					alert(xhr.responseText);
+					
+				}
+				
+			})
+			.done(function(retour){
+				//alert(retour);
+				$('#stock').val(retour);
+			});
+		}else{
+			$('#stock').val("");
+		}
+		
 	
 	
 	return false;

@@ -31,19 +31,19 @@ $ord_hospitalisation = $this->md_patient->recup_ordonnance_hospitalisation($id);
 	<body>
 		<div style="padding:0px 30px 0px 30px" >
 			<!-- En-tête du reçu -->
-			<table style="width:100%; height:120px" >
+			<table style="width:100%; margin-top:20px;">
 				<tr>
-					<td  align="left"  style="width:25%">
+					<td  align="center" style="width:40%">
 						<div align="center">
-							<span style="font-weight:bold;font-size:3pt">ARMEE DU SALUT<span></br>
+							<span style="font-weight:bold;font-size:10pt">ARMEE DU SALUT<span></br>
 							<span>**************</span></br>
-							<span style="font-size:2pt">Service de sante</span></br>
+							<span style="font-size:10pt">Service de sante</span></br>
 							<span >****************<span></br>
-							<span style="font-size:2pt"><?php echo $info->str_sEnseigne  ;?></span>
+							<span style="font-size:10pt"><?php echo $info->str_sEnseigne  ;?></span>
 						</div>
 					</td>
-					<td  align="right" ><img src="<?php echo base_url($info->str_sLogo) ;?>" width="100px" height="100px" /></td>
-					
+					<td align="center"   style="width:20%"></td>
+					<td  align="right" style="width:40%"><img src="<?php echo base_url($info->str_sLogo) ;?>" style="width:150px; height:150px" border="0" /></td>
 				</tr>
 			</table>
 			<table style="margin-top:40px">

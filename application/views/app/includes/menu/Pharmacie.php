@@ -1,4 +1,4 @@
-						<li class="<?php if ($sousPage == "recu_caisse" or $sousPage == "recu_caisse_bon" or $sousPage == "recu_caisse_impaye" or $sousPage == "recu_caisse_assure" or $sousPage == "recu_caisse_non_assure" or !isset($sousPage)) {
+						<!--<li class="<?php if ($sousPage == "recu_caisse" or $sousPage == "recu_caisse_bon" or $sousPage == "recu_caisse_impaye" or $sousPage == "recu_caisse_assure" or $sousPage == "recu_caisse_non_assure" or !isset($sousPage)) {
 										echo "active";
 									} ?>"><a href="javascript:void(0);" class="menu-toggle"><i class="fa fa-dollar"></i><span>Caisse</span> </a>
 							<ul class="ml-menu">
@@ -21,7 +21,7 @@
 											echo "style='color:#fff'";
 										} ?> href="<?php echo site_url("pharmacie/recu_caisse_impaye"); ?>">Factures impayées</a></li>
 							</ul>
-						</li>
+						</li>-->
 						<li class="<?php if ($sousPage == "stock" or $sousPage == "destock" or $sousPage == "produits" or $sousPage == "liste_produit" or $sousPage == "liste_entrees" or $sousPage == "entree") {
 										echo "active";
 									} ?>"><a href="javascript:void(0);" class="menu-toggle"><i class="fa fa-medkit"></i><span>Stock</span> </a>

@@ -15,24 +15,24 @@
 						
 						<div class="card">
 							<div class="header">
-								<h2>Prélèvements laboratoires</h2>
-								<?php var_dump($user->ser_id) ?>
+								<h2>Prelevements laboratoires</h2>
+								
 							</div>
 							<div class="body table-responsive">
 								  <!-- Nav tabs -->
 								<ul class="nav nav-tabs">
 									<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">En attente</a></li>
-									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Déjà prélévé</a></li>
+									<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Deja preleve</a></li>
 								</ul>                        
 								<!-- Tab panes -->
 								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane in active" id="home"> <b>Contenu du prélèvement en attente</b>
+									<div role="tabpanel" class="tab-pane in active" id="home"> <b>Contenu du prelevement en attente</b>
 										<table id="example3" class="table table-bordered table-striped table-hover">
 											<thead>
 												<tr>
 													<th>Patient</th>
 													<th>Acte laboratoire</th>
-													<th>Médécin prescripteur</th>
+													<th>Medecin prescripteur</th>
 													<th class="text-center">Action</th>
 												</tr>
 											</thead>

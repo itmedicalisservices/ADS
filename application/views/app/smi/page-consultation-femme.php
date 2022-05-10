@@ -1655,6 +1655,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 																			<thead>
 																				<tr>
 																					<th style="width:20%">Produit</th>
+																					<th style="width:20%">stock</th>
 																					<th style="width:10%">Qte</th>
 																					<th style="width:10%">Posologie</th>
 																					<th style="width:10%">Durée</th>
@@ -1664,10 +1665,10 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 																				</tr>
 																				<tr>
 																					<td style="padding:0;width:20%;">
-																						<select id="med" class="selectProduit selectord" onChange="groupe();" style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
+																						<select id="med" class="selectProduit selectord" <?php //echo 'onChange="groupe();"'; ?> style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
 																							<option value="">----- Prescription * -----</option>
 																							 <?php foreach($listeMed AS $l){ ?>
-																							<option value="<?php echo $l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
+																							<option value="<?php echo $l->med_id.'-/-'.$l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
 																							 <?php } ?>
 																							<!-- <option value="autre">Autre</option>-->
 																						</select>
@@ -1676,6 +1677,9 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 																							<input type="text" id="forme" style="width:25%" placeholder="forme"/>
 																							<input type="text" id="dosage" style="width:15%" placeholder="dosage"/>
 																						</div>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="text" min="1" readonly id="stock" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
 																					</td>
 																					<td style="padding:0;width:10%;">
 																						<input type="number" min="1" id="qte" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
@@ -1833,6 +1837,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 														</div>
 													</div>
 												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -2305,12 +2310,13 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 </div>
 
 
+
  
 <script type="text/javascript">
         'use strict';
 		
 		
-		function groupe(){
+		/*function groupe(){
 			 var med = document.getElementById('med').value;
 			 if(med == "autre"){
 				 document.getElementById('bloc').classList.remove("cacher");
@@ -2318,7 +2324,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 			 else{
 				 document.getElementById('bloc').classList.add("cacher");
 			 }
-		}
+		}*/
 		
         var listeOrd = document.querySelector('#tbodyOrd');
         var addOrd = document.querySelector('#addOrd');
@@ -2339,6 +2345,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
         {
             var med 	            = document.getElementById('med').value;
             var qte 	            = document.getElementById('qte').value;
+            var stock 	            = document.getElementById('stock').value;
             var duree 	            = document.getElementById('duree').value;
             var pos 	            = document.getElementById('pos').value;
             var typePos 	        = document.getElementById('typePos').value;
@@ -2353,19 +2360,24 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 					alert('Veuillez renseigner le champs.');	
 				}
 				else {
-					var contact = new Object();
-					contact.med	       	    = med;
-					contact.qte	    		= qte;
-					contact.duree	        = duree;
-					contact.pos	        	= pos;
-					contact.typePos	        = typePos;
-					contact.typeRenew	    = typeRenew;
-					contact.typeFreq	    = typeFreq;
-					annuaire.push(contact);
-					showListeOrdMed();	
-					document.getElementById('qte').value="";
-					document.getElementById('duree').value="";
-					document.getElementById('pos').value="";
+					if(qte <= stock){
+						var contact = new Object();
+						contact.med	       	    = med;
+						contact.qte	    		= qte;
+						contact.duree	        = duree;
+						contact.pos	        	= pos;
+						contact.typePos	        = typePos;
+						contact.typeRenew	    = typeRenew;
+						contact.typeFreq	    = typeFreq;
+						annuaire.push(contact);
+						showListeOrdMed();	
+						document.getElementById('qte').value="";
+						document.getElementById('duree').value="";
+						document.getElementById('pos').value="";
+					}else{
+						alert('Ce produit ne peut être ajouté car le stock est insuffisant');
+					}
+					
 				}
 			}
 			else{
@@ -2373,24 +2385,29 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 					alert('Veuillez renseigner le champs.');	
 				}
 				else {
-					var contact = new Object();
-					contact.medi	       	= medi;
-					contact.forme	       	= forme;
-					contact.dosage	        = dosage;
-					contact.qte	    		= qte;
-					contact.duree	        = duree;
-					contact.pos	        	= pos;
-					contact.typePos	        = typePos;
-					contact.typeRenew	    = typeRenew;
-					contact.typeFreq	    = typeFreq;
-					annuaire.push(contact);
-					showListeOrdAutre();	
-					document.getElementById('medi').value="";
-					document.getElementById('forme').value="";
-					document.getElementById('dosage').value="";
-					document.getElementById('qte').value="";
-					document.getElementById('duree').value="";
-					document.getElementById('pos').value="";
+					if(qte <= stock){
+						var contact = new Object();
+						contact.medi	       	= medi;
+						contact.forme	       	= forme;
+						contact.dosage	        = dosage;
+						contact.qte	    		= qte;
+						contact.duree	        = duree;
+						contact.pos	        	= pos;
+						contact.typePos	        = typePos;
+						contact.typeRenew	    = typeRenew;
+						contact.typeFreq	    = typeFreq;
+						annuaire.push(contact);
+						showListeOrdAutre();	
+						document.getElementById('medi').value="";
+						document.getElementById('forme').value="";
+						document.getElementById('dosage').value="";
+						document.getElementById('qte').value="";
+						document.getElementById('duree').value="";
+						document.getElementById('pos').value="";
+					}else{
+						alert('Ce produit ne peut être ajouté car le stock est insuffisant');
+					}
+					
 				}
 			}
         }
@@ -2403,9 +2420,11 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
             var tailleTableau = annuaire.length;            
                 
             for(var i = 0; i < tailleTableau; i++) {
-				
+				var tabMed="";
+				tabMed =annuaire[i].med.split("-/-");
+				alert(tabMed[1]);
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+ annuaire[i].med+'"/>' +annuaire[i].med + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value="'+ tabMed[0]+'"/><input type="hidden" name="med[]" value="'+ tabMed[1]+'"/>' +tabMed[1] + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + '</td>';
@@ -2433,7 +2452,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 					jour ="jour";
 				}
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + ' '+jour+'</td>';
@@ -2548,7 +2567,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
             for(var i = 0; i < tailleTableau; i++) {
 				
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+ annuaire[i].medi+'"/>' +annuaire[i].medi + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+ annuaire[i].medi+'"/>' +annuaire[i].medi + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + '</td>';
@@ -2576,7 +2595,7 @@ $odij = date("Y-m-d"); $heure = date("H:i:s");
 					jour ="jour";
 				}
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + ' '+jour+'</td>';

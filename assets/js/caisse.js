@@ -354,4 +354,50 @@ $("select#selectAssurance").on("change",function(){
 	
 });
 
+$('#select').on("change",function(){
+	var select = $('#select').val();
 	
+	if(select=='comptant'){
+		$("#assu").addClass("cacher");
+		$("#client").addClass("cacher");
+		$("#paye").removeClass("cacher");
+	}else if(select=='bonpharmacie'){
+		$("#assu").addClass("cacher");
+		$("#client").removeClass("cacher");
+		$("#paye").addClass("cacher");
+	}else{
+		$("#assu").removeClass("cacher");
+		$("#client").addClass("cacher");
+		$("#paye").removeClass("cacher");
+	}
+});
+
+
+
+$('#type').on("change",function(){
+	var select = $('#type').val();
+	
+	if(select != ""){
+		var tab = select.split("-/-");
+		var montant  = $("#tfooter").val();
+		if(montant!=""){
+			var couverture = (parseInt(montant)*parseInt(tab[1]))/100;
+			$("#montantAss").val(couverture);
+			
+			var reste = parseInt(montant) - couverture;
+			$("#mess").html("L'assureur couvre "+tab[1]+"% des charges, le client paie <b>"+reste+" Fcfa</b>")
+			if(reste == 0){
+				$("#pay").addClass("cacher");
+			}
+			else{
+				$("#pay").removeClass("cacher");
+			}
+		}
+		else{
+			$("#mess").html("");
+		}
+	}
+	else{
+		$("#mess").html("");
+	}
+});

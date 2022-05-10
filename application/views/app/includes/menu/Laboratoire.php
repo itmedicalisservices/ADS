@@ -4,13 +4,13 @@
 							<ul class="ml-menu">
 								<li><a <?php if ($page == "laboratoire" and $sousPage == "prevelements") {
 											echo "style='color:#fff'";
-										} ?> href="<?php echo site_url("laboratoire/prevelements"); ?>">Prélévements</a></li>
+										} ?> href="<?php echo site_url("laboratoire/prevelements"); ?>">Prelevements</a></li>
 								<li><a <?php if ($page == "laboratoire" and $sousPage == "examens") {
 											echo "style='color:#fff'";
-										} ?> href="<?php echo site_url("laboratoire/examens"); ?>">Examens à faire</a></li>
+										} ?> href="<?php echo site_url("laboratoire/examens"); ?>">Examens a faire</a></li>
 								<li><a <?php if ($page == "laboratoire" and $sousPage == "examens_faits") {
 											echo "style='color:#fff'";
-										} ?> href="<?php echo site_url("laboratoire/examens_faits"); ?>">Examens terminés</a></li>
+										} ?> href="<?php echo site_url("laboratoire/examens_faits"); ?>">Examens termines</a></li>
 
 								<li><a <?php if ($page == "laboratoire" and $sousPage == "stock") {
 											echo "style='color:#fff'";

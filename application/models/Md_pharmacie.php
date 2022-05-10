@@ -27,6 +27,8 @@ class Md_pharmacie extends CI_Model {
 	protected $tableFic = "armee.t_fictif_fic";
 	protected $tableAss = "armee.t_assureurs_ass";
 	protected $tableHis = "armee.t_historique_rupture_his";
+	protected $tablePat = "armee.t_patients_pat";
+	protected $tableDis = "armee.t_dispenser_dis";
 	
 	
 	
@@ -293,10 +295,29 @@ class Md_pharmacie extends CI_Model {
 		->join($this->tableAss, $this->tableAss.'.ass_id ='.$this->tableFac.'.ass_id ','left')
 		->join($this->tableBph, $this->tableBph.'.bph_id ='.$this->tableFac.'.bph_id ','left')
 		->join($this->tableClt, $this->tableClt.'.clt_id ='.$this->tableBph.'.clt_id ','left')
+		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableFac.'.pat_id ','inner')
 		->where($this->tableFac.".fac_sObjet","Vente médicament")
 		->get($this->tableFac)->result();
 	}
 	
+	//Raby
+	// Pour gerer le patient comme client
+	public function liste_recu_caisse2()
+	{
+		return $this->db
+		->join($this->tableElf, $this->tableElf.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->join($this->tableAch, $this->tableAch.'.ach_id ='.$this->tableElf.'.ach_id ','inner')
+		->join($this->tableMed, $this->tableMed.'.med_id ='.$this->tableAch.'.med_id ','inner')
+		->join($this->tableFor, $this->tableFor.'.for_id ='.$this->tableMed.'.for_id ','inner')
+		->join($this->tableAss, $this->tableAss.'.ass_id ='.$this->tableFac.'.ass_id ','left')
+		->join($this->tableBph, $this->tableBph.'.bph_id ='.$this->tableFac.'.bph_id ','left')
+		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableFac.'.pat_id ','inner')
+		->join($this->tableDis, $this->tableDis.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->where( $this->tableDis.".dis_iSta",1)
+		->where($this->tableFac.".fac_sObjet","Vente médicament")
+		->get($this->tableFac)->result();
+	}
+	//Raby
 	public function liste_recu_caisse_bon()
 	{
 		return $this->db
@@ -342,6 +363,21 @@ class Md_pharmacie extends CI_Model {
 		->join($this->tableCat, $this->tableCat.'.cat_id='.$this->tableMed.'.cat_id','inner')
 		->where($this->tableElf.".fac_id",$id)
 		->get($this->tableElf)->result();
+	}	
+	
+	
+	public function recup_med_facture($fac,$med)
+	{
+		return $this->db
+		->join($this->tableElf, $this->tableElf.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->join($this->tableAch, $this->tableAch.'.ach_id ='.$this->tableElf.'.ach_id ','inner')
+		->join($this->tableDis, $this->tableDis.'.fac_id ='.$this->tableFac.'.fac_id ','inner')
+		->join($this->tableMed, $this->tableAch.'.med_id ='.$this->tableMed.'.med_id ','inner')
+		->join($this->tableFor, $this->tableFor.'.for_id='.$this->tableMed.'.for_id','inner')
+		->where($this->tableDis.".dis_iSta",1)
+		->where($this->tableFac.".fac_id",$fac)
+		->where($this->tableAch.".med_id",$med)
+		->get($this->tableFac)->row();
 	}	
 	
 	
@@ -530,6 +566,9 @@ class Md_pharmacie extends CI_Model {
 	public function ajout_produit($donnees){
 		return $this->db->insert($this->tableMed,$donnees);
 	}		
+	public function ajout_dispenser($donnees){
+		return $this->db->insert($this->tableDis,$donnees);
+	}		
 	
 		
 	public function ajout_detail_commande($donnees){
@@ -549,6 +588,10 @@ class Md_pharmacie extends CI_Model {
 	
 	public function maj_entree($donnees,$id){
 		return $this->db->where("ach_id",$id)->update($this->tableAch,$donnees);
+	}
+	
+	public function maj_dispenser($donnees,$id){
+		return $this->db->where("dis_id",$id)->update($this->tableDis,$donnees);
 	}
 	
 	public function entree_stock($donnees){
@@ -590,7 +633,25 @@ class Md_pharmacie extends CI_Model {
 		->where($this->tableMed.".med_sUnite",$uni)
 		->get($this->tableMed)->row();
 	}
+	
+	public function verif_produit1($nc,$fors, $dos, $uni){
+		return $this->db
+		->where($this->tableMed.".med_sNc",$nc)
+		->where($this->tableMed.".for_id",$fors)
+		->where($this->tableMed.".med_iDosage",$dos)
+		->where($this->tableMed.".med_sUnite",$uni)
+		->get($this->tableMed)->row();
+	}
 
+	public function verif_produit_modif1($nc,$fors, $dos, $uni, $id){
+		return $this->db
+		->where($this->tableMed.".med_sNc",$nc)
+		->where($this->tableMed.".for_id",$fors)
+		->where($this->tableMed.".med_iDosage",$dos)
+		->where($this->tableMed.".med_sUnite",$uni)
+		->where($this->tableMed.".med_id !=",$id)
+		->get($this->tableMed)->row();
+	}
 	public function verif_produit_modif($nc, $cat, $fam, $fors, $dos, $uni, $id){
 		return $this->db
 		->where($this->tableMed.".med_sNc",$nc)
@@ -603,6 +664,13 @@ class Md_pharmacie extends CI_Model {
 		->get($this->tableMed)->row();
 	}
 
+	public function recup_produit1($id)
+	{
+		return $this->db
+		->join($this->tableFor, $this->tableMed.'.for_id='.$this->tableFor.'.for_id','inner')
+		->where($this->tableMed.".med_id",$id)
+		->get($this->tableMed)->row();
+	}
 	public function recup_produit($id)
 	{
 		return $this->db
@@ -633,8 +701,6 @@ class Md_pharmacie extends CI_Model {
 	{
 		return $this->db
 		->join($this->tableAch, $this->tableMed.'.med_id='.$this->tableAch.'.med_id','inner')
-		->join($this->tableCat, $this->tableMed.'.cat_id='.$this->tableCat.'.cat_id','inner')
-		->join($this->tableFam, $this->tableMed.'.fam_id='.$this->tableFam.'.fam_id','inner')
 		->join($this->tableFor, $this->tableMed.'.for_id='.$this->tableFor.'.for_id','inner')
 		->where($this->tableMed.".med_iSta",1)
 		->order_by($this->tableMed.".med_sNc","asc")
@@ -663,6 +729,19 @@ class Md_pharmacie extends CI_Model {
 		->join($this->tableMed, $this->tableMed.'.med_id='.$this->tableAch.'.med_id','inner')
 		->join($this->tableCat, $this->tableMed.'.cat_id='.$this->tableCat.'.cat_id','inner')
 		->join($this->tableFam, $this->tableMed.'.fam_id='.$this->tableFam.'.fam_id','inner')
+		->join($this->tableFor, $this->tableMed.'.for_id='.$this->tableFor.'.for_id','inner')
+		->join($this->tableCel, $this->tableAch.'.cel_id='.$this->tableCel.'.cel_id','inner')
+		->join($this->tableArm, $this->tableCel.'.arm_id='.$this->tableArm.'.arm_id','inner')
+		->join($this->tableSal, $this->tableArm.'.sal_id='.$this->tableSal.'.sal_id','inner')
+		->where($this->tableAch.".ach_id",$id)
+		->order_by($this->tableMed.".med_sNc","desc")
+		->get($this->tableAch)->row();
+	}
+	
+	public function recup_medicament_actifs2($id)
+	{
+		return $this->db
+		->join($this->tableMed, $this->tableMed.'.med_id='.$this->tableAch.'.med_id','inner')
 		->join($this->tableFor, $this->tableMed.'.for_id='.$this->tableFor.'.for_id','inner')
 		->join($this->tableCel, $this->tableAch.'.cel_id='.$this->tableCel.'.cel_id','inner')
 		->join($this->tableArm, $this->tableCel.'.arm_id='.$this->tableArm.'.arm_id','inner')
@@ -938,5 +1017,10 @@ class Md_pharmacie extends CI_Model {
 		->get($this->tableDac)->result();
 	}
 	
-		
+	public function recupQuantite($id)
+	{
+		return $this->db
+		->where("med_id",$id)
+		->get($this->tableAch)->row();
+	}
 }

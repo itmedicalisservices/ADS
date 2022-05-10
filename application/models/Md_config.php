@@ -13,6 +13,29 @@ class Md_config extends CI_Model {
 	}
 	
 	
+	public function sendSMS($msg,$date,$tel){
+		
+		\SMSFactor\SMSFactor::setApiToken(TOKEN_SMSFACTOR);
+		$response = \SMSFactor\Campaign::send([
+			'sms' => [
+				'message' => [
+					'text' => $msg,
+					'pushtype' => 'alert', //alert(default) or marketing
+					'sender' => 'SDK', //Optional
+					'delay' => $date //Optional. Omit for immediate send
+				],
+				'recipients' => [
+					'gsm' => [
+						[
+							'value' => $tel
+						]
+					]
+				]
+			]
+		], false); // True to simulate the campaign (no SMS sent)
+		
+	}
+	
 	public function cumulPassCess($premier, $dernier)
 	{
 		$recupCes = $this->md_parametre->recupCumulCession($premier, $dernier);
@@ -30,6 +53,8 @@ class Md_config extends CI_Model {
 		
 		return $posCumul.'-/-'.$negCumul;
 	}
+	
+	
 	
 	public function typeJrnl($typemvt, $acte)
 	{
@@ -791,7 +816,7 @@ class Md_config extends CI_Model {
 		  
 		// Couleurs des Barres, et du Fond au
 		// format '#rrggbb'
-		$this->md_barcode->setColors('#123456', '#F9F9F9');
+		$this->md_barcode->setColors('123456', 'F9F9F9');
 		// Type de fichier : GIF ou PNG (par défaut)
 		$this->md_barcode->setFiletype('PNG');
 		  

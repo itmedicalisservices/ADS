@@ -1322,6 +1322,27 @@ $("#facture").on("click",function(){
 	return false;
 });
 
+$("#factureOrd").on("click",function(){
+
+	var data = $('#form-factureOrd').serialize();
+	$.ajax({
+		type:"POST",
+		url: ensembleFactureOrd,
+		data:data,
+		async:true,
+		error:function(xhr, status, error){
+			alert(xhr.responseText);
+		}
+		
+	})
+	.done(function(retour){
+		
+		$("#recepFactOrd").html(retour);
+	});
+	
+	return false;
+});
+
 
 $("#facture_2").on("click",function(){
 
@@ -1392,6 +1413,17 @@ $(".checkPatient").click(function(){
 	}
 	else{
 		$("#facture").addClass("cacher");
+	}
+});
+
+
+$(".checkPatientOrd").click(function(){
+	var check = $("input[type=checkbox]:checked");
+	if(check.length >= 1){
+		$("#factureOrd").removeClass("cacher");
+	}
+	else{
+		$("#factureOrd").addClass("cacher");
 	}
 });
 

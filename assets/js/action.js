@@ -37,6 +37,16 @@ $(".checkPatient").click(function(){
 	}
 });
 
+$(".checkPatientOrd").click(function(){
+	var check = $("input[type=checkbox]:checked");
+	if(check.length >= 1){
+		$("#factureOrd").removeClass("cacher");
+	}
+	else{
+		$("#factureOrd").addClass("cacher");
+	}
+});
+
 var Total=0;
 var value="";
 $(".checkRECOU").click(function(){

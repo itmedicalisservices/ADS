@@ -319,7 +319,7 @@
 			configEtat = {
 				type: 'line',
 				data: {
-					labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,,35,36],
+					labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36],
 					datasets: [{
 							label: "TA",
 							data: donneePoidsMax,
@@ -501,6 +501,17 @@
 			 location.href="/ads/index.php/Authentification/deconnexion/";
         }
     }
+ </script>
+
+<script type="text/javascript">
+	window.onload=relance();
+	
+	function relance(){
+		if(getUTCHours()+':'+getUTCMinutes	== "16:52"){
+		   alert('Heure');
+	    }
+	}
+   
  </script>
 
 

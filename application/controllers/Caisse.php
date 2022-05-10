@@ -81,6 +81,298 @@ class Caisse extends CI_Controller {
 	}
 	//RABY
 		
+	public function ensembleFactureOrd()
+	{
+		$data = $this->input->post();
+		$pat = explode('-/-', $data['id'][0]);
+		// var_dump($pat);
+		
+		$cout = array();
+		$patient = $this->md_patient->recup_patient($pat[1]);
+		$listeassurance = $this->md_parametre->liste_assureurs_actifs();
+		$listetype = $this->md_parametre->liste_type_couverture_assurance_actifs();
+		echo '
+			<div class="row clearfix">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="card all-patients">
+						<div class="body">
+							<div class="row">
+								<div class="col-md-9 col-sm-9 m-b-0">
+									<h5 class="m-b-0">'.$patient->pat_sNom.' '.$patient->pat_sPrenom.'</h5> 
+								</div>
+								<div class="col-md-3 col-sm-3 m-b-0">
+									<address class="m-b-0">
+										<abbr title="Numéro matricule patient">ID: '.$patient->pat_sMatricule.'</abbr>
+								   </address>               
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		';
+		// die();
+		// $nombre = count($data["id"]);
+		echo '
+			<table class="table table-bordered table-striped table-hover" style="margin-top:-15px">
+				<thead>
+					<tr>
+						<th>Produits</th>
+						<th>Quantité</th>
+						<th>Coût du produit</th>
+						<th>Montant</th>
+					</tr>
+				</thead>
+			   
+				<tbody>';
+					for($i=0;$i<count($data["id"]);$i++){
+						$eloId = explode('-/-', $data['id'][$i]);
+						if($eloId[1] == $pat[1]){
+							
+						
+						
+						$recupAct = $this->md_patient->element_ordonnance_pat($eloId[0], $pat[1]);
+						// var_dump($recupAct);
+						$cout[]=$recupAct->ach_iPrixVente*$recupAct->elo_iQuantite;
+						$produit=$recupAct->med_id;
+						$PU=$recupAct->ach_iPrixVente;
+						$Qte=$recupAct->elo_iQuantite;
+						$idAch=$recupAct->ach_id;
+						echo '<tr>
+								<td>
+									'.$recupAct->med_sNc.'
+									<input type="hidden" name="produit[]" value="'.$produit.'"/>
+									<input type="hidden" name="pat" value="'.$pat[1].'"/>
+									<input type="hidden" name="pu[]" value="'.$PU.'"/>
+									<input type="hidden" name="qte[]" value="'.$Qte.'"/>
+									<input type="hidden" name="cout[]" value="'.$Qte*$PU.'"/>
+									<input type="hidden" name="idAch[]" value="'.$idAch.'"/>
+									<input type="hidden" name="elo[]" value="'.$eloId[0].'"/>
+								</td>
+								<td>
+									'.$recupAct->elo_iQuantite.'
+								</td>
+								<td>
+									'.$recupAct->ach_iPrixVente.'
+								</td>
+								<td>
+									'.$recupAct->ach_iPrixVente*$recupAct->elo_iQuantite.'
+								</td>
+								
+								<td>
+									<i class="fa fa-check text-success" style="font-size:22px"></i>
+								</td>
+							</tr>';
+					 }}
+					 	echo '</tbody>
+					  <tfooter>
+							
+							<tr>
+								<td colspan="6" class="text-right">
+									<strong>Total à payer:</strong> <input type="text" id="tfooter" name="montantTotal" placeholder="0" value="'.array_sum($cout).'"  readonly />										
+								</td>
+							</tr>
+							<tr>
+								<td colspan="6" class="text-right">
+									<strong>Type de paiement:</strong> 
+									<select name="typePaie" id="select" style="width:180px;padding-top:5px;padding-bottom:5px;">
+										<option value="comptant">comptant</option>
+										<option value="bonpharmacie">bon pharmacie</option>
+										<option value="assurance">assurance</option>
+									</select>										
+								</td>
+							</tr>									
+							<tr id="assu" class="cacher">
+								<td colspan="6" class="text-right">
+									<select name="ass" style="width:180px;padding-top:5px;padding-bottom:5px;">
+										<option value="">----- assureur -----</option>';
+										 foreach($listeassurance AS $la){
+											echo '<option value="'.$la->ass_id.'">'.$la->ass_sLibelle.'</option>';
+										 }
+									echo '</select>								
+									
+									<select name="tas" id="type" style="width:180px;padding-top:5px;padding-bottom:5px;">
+										<option value="">----- Type d\'assurance -----</option>';
+										foreach($listetype AS $t){
+											echo '<option value="'.$t->tas_id."-/-".$t->tas_iTaux.'">'.$t->tas_sLibelle.'</option>';
+										}
+									echo '</select><br>
+									<span id="mess"></span>
+									 <input type="hidden" id="montantAss" name="montantAss" />									
+								</td>
+							</tr>	
+							
+							<tr id="client" class="cacher">
+								<td colspan="6" class="text-right">
+									<strong>N° de Bon de pharmacie:</strong> <input type="text" id="bon" name="bon" />
+									<br>
+									<span class="retourBon" style="color:red"></span>
+								</td>
+							</tr>
+							<tr id="paye">
+								<td colspan="6" class="text-right">
+									<strong>Montant payé:</strong> <input type="text" name="montantPaye" placeholder="0" />										
+								</td>
+							</tr>
+					  </tfooter>
+			</table>';
+			echo '<script src="'.base_url('assets/js/caisse.js').'"></script>';
+			echo '<script src="'.base_url('assets/js/select2.min.js').'"></script>';			
+			{ ?>
+				<script>		
+					$("select#medPrst").select2({
+						placeholder: "-- Sélectionner le médecin prescripteur --",
+						allowClear: true
+					});	
+				</script>
+			<?php }
+	}
+	
+	//RABY
+	public function effectuerVente2()
+	{
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+
+		$this->md_pharmacie->vide();
+		
+		if($data['typePaie']=='comptant'){
+			$tas = NULL;
+			$ass= NULL;
+			$bph= NULL;
+			$reste= $data['montantTotal'] - $data['montantPaye'];
+			$montantAss = NULL;
+		}
+		elseif($data['typePaie']=='bonpharmacie'){
+			$tas = NULL;
+			$ass= NULL;
+			$bn = $this->md_pharmacie->recup_bon($data['bon']);
+			$bph = $bn->bph_id;
+			$montantBon = $bn->bph_iMontantConso;
+			$resultat = $montantBon+$data['montantTotal'];
+			$resteBon = $bn->bph_iReste-$data['montantTotal'];
+			$don = array('bph_iReste'=>$resteBon,'bph_iMontantConso'=>$resultat);
+			$update = $this->md_pharmacie->maj_bon($don, $bph);
+			$reste = 0;
+			$montantAss = NULL;
+			$data['montantPaye'] = $data['montantTotal'];
+			
+		}elseif($data['typePaie']=='assurance'){
+			$tas = $data['tas'];
+			$ass= $data['ass'];
+			$bph= NULL;
+			$reste= $data['montantTotal'] - ($data['montantPaye'] + $data['montantAss']);
+			$montantAss = $data['montantAss'];
+		}
+		
+		$donnees = array(
+			'per_id'=>$this->session->armee,
+			'pat_id'=>$data['pat'],
+			'fac_iSta'=>1,
+			'sta_iPer'=>0,/*Ajout pour initialisation à 0*/
+			'bph_id'=>$bph,
+			'fac_sObjet'=>'Vente médicament',
+			'fac_iMontant'=>$data['montantTotal'],
+			'fac_iMontantPaye'=>$data['montantPaye'],
+			'fac_iMontantAss'=>$montantAss,
+			'fac_iReste'=>$reste,
+			"fac_iSituationAss"=>0, /*Ajout pour insérer 0*/
+			'tas_id'=>$tas,
+			'ass_id'=>$ass,
+			'fac_dDatePaie'=>date("Y-m-d")
+		);
+		$insert = $this->md_patient->ajout_facture($donnees);
+		
+		
+		for($i=0; $i<count($data['qte']) AND $i<count($data['idAch']);$i++){
+			
+			$tabDonnees = array(
+				'fac_id'=>$insert,
+				'ach_id'=>$data['idAch'][$i],
+				'elf_iSta'=>1,
+				'elf_iQte'=>$data['qte'][$i],
+				'elf_iCout'=>$data['cout'][$i],
+				'elf_dDate'=>date("Y-m-d"),
+				'per_iElf'=>$this->session->armee,
+				'pat_iElf'=>$data['pat'],
+				'elf_iRemise'=>0
+			);
+			
+			$in = $this->md_patient->ajout_elements_facture($tabDonnees);
+			if($in){
+				$dataUpdate = array('elo_iSta'=>2);
+				$update = $this->md_patient->maj_element_ordonnance($data['elo'][$i],$dataUpdate);
+				$donneeDis = array(
+					'dis_iSta'=>1,
+					'dis_iQteAD'=>$data['qte'][$i],
+					'dis_iQteD'=>0,
+					'fac_id'=>$insert,
+					'ach_id'=>$data['idAch'][$i],
+					'dis_dDate'=>date("Y-m-d"),
+					'per_id'=>$this->session->armee,
+				
+				);
+				$addDis = $this->md_pharmacie->ajout_dispenser($donneeDis);
+				
+			}
+			
+		}
+		
+		/*for($k=0; $k<count($data['code']);$k++){			
+				
+			$donn = array(
+				'pro_iSta'=>2,
+				'pro_dDateDestock'=>date("Y-m-d"),
+				'pro_sMotif'=>'Produit(s) vendu(s)'
+			);
+			$this->md_pharmacie->maj_code($donn,$data['code'][$k]);
+			
+		}*/
+		
+			$log = array(
+				"log_iSta"=>0,
+				"per_id"=>$this->session->armee,
+				"log_sTable"=>"t_facture_fac",
+				"log_sIcone"=>"nouveau membre",
+				"log_sAction"=>"a effectué une vente",
+				"log_sActionDetail"=>"montant total de la vente : <strong style='text-decoration:underline'>".$data['montantTotal']."</strong>",
+				"log_dDate"=>date("Y-m-d H:i:s")
+			);
+			$this->md_connexion->rapport($log);	
+			
+			
+		$this->load->view('impression/recu_pharmacie', array("id"=>$insert));
+	
+	// return ;
+	
+		//chargement de HTML
+		$html=$this->output->get_output();
+		
+		//chargement de la librairie pdf
+		$this->load->library('pdf');
+		
+		//chargement du contenu HTML
+		$this->dompdf->loadHTML($html);
+		
+		//setup paper size and orientation
+		$this->dompdf->setPaper('A7', 'portrait');//recu_pharmacie
+		// $this->dompdf->setPaper('A4', 'portrait');//courrier;dossier_medical;fiche_personnel;laboratoire;liste-inventaire-stock;hospitalisation
+		// $this->dompdf->setPaper('A5', 'portrait');//ordonnance;acte_de_deces;acte_de_naissance;consultation;imagerie
+		// $this->dompdf->setPaper('A5', 'portrait');//acte_de_naissance
+		
+		//render HTML as PDF
+		$this->dompdf->render();
+		
+		//output PDF
+		$this->dompdf->stream("recu_pharmacie_".$insert.".pdf",array('attachment'=>0));
+		return redirect('caisse');	
+		
+		
+	}
+	//RABY
+	
+	
+	
 	public function ensembleFacture()
 	{
 		$data = $this->input->post();
@@ -354,6 +646,7 @@ class Caisse extends CI_Controller {
 					</div>
 				</div>
 			</div>';
+			
 			echo '<script src="'.base_url('assets/js/caisse.js').'"></script>';
 			echo '<script src="'.base_url('assets/js/select2.min.js').'"></script>';			
 			{ ?>

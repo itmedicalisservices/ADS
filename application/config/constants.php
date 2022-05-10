@@ -47,6 +47,7 @@ defined('FOPEN_WRITE_CREATE')                   OR define('FOPEN_WRITE_CREATE', 
 defined('FOPEN_READ_WRITE_CREATE')              OR define('FOPEN_READ_WRITE_CREATE', 'a+b');
 defined('FOPEN_WRITE_CREATE_STRICT')            OR define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+defined('TOKEN_SMSFACTOR')       OR define('TOKEN_SMSFACTOR', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1OTAwOSIsImlhdCI6MTY1MDAyNjE1NS4xOTE4MzR9.3p68qpUsq85OGKJ7cwWSgOktciJuFs7Ae9v4qctlcvY');
 
 /*
 |--------------------------------------------------------------------------

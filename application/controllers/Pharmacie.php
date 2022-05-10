@@ -30,6 +30,10 @@ class Pharmacie extends CI_Controller {
 	{
 		$this->load->view('app/pharmacie/page-compte-client');
 	}		
+	public function dispenser($fac,$med)
+	{
+		$this->load->view('app/pharmacie/page-dispenser',array("fac"=>$fac,"med"=>$med));
+	}		
 	
 	
 	public function nouveau_bon()
@@ -498,22 +502,23 @@ class Pharmacie extends CI_Controller {
 			return redirect("pharmacie/categorie_produit");
 		}
 		else{
-			
-			if(trim($data['ns']) == ""){
+			var_dump($data);
+			/*if(trim($data['ns']) == ""){
 				$ns=NULL;
 			}
 			else{
 				$ns=ucfirst(trim($data['ns']));
-			}
+			}*/
 			
-			$verif = $this->md_pharmacie->verif_produit(ucfirst(trim($data['nc'])),$data['cat'],$data['fam'],$data['fors'],trim($data['dos']),trim($data['uni']));
+			if(trim($data['dos']) ==""){$data['dos']=NULL;}
+			if(ucfirst(trim($data['uni'])) ==""){$data['uni']=NULL;}
+			$verif = $this->md_pharmacie->verif_produit1(ucfirst(trim($data['nc'])),$data['fors'],trim($data['dos']),trim($data['uni']));
 			if(!$verif){
 				$donnees = array(
 				"med_sNc"=>ucfirst(trim($data['nc'])),
-				"med_sNs"=>$ns,
-				"cat_id"=>trim($data['cat']),
-				"fam_id"=>trim($data['fam']),
+				"med_sNs"=>NULL,
 				"for_id"=>trim($data['fors']),
+				"med_sConditionment"=>trim($data['condi']),
 				"med_iDosage"=>trim($data['dos']),
 				"med_sUnite"=>ucfirst(trim($data['uni'])),
 				"med_iSta"=>1
@@ -542,22 +547,24 @@ class Pharmacie extends CI_Controller {
 		$data = $this->input->post();
 		if(empty($data)){
 			return redirect("pharmacie/modifier_produit");
-			// var_dump($data);
+			
 		}
 		else{
-			if(trim($data["ns"]) == ""){
+			
+			/*if(trim($data["ns"]) == ""){
 				$ns=NULL;
 			}else{
 				$ns = ucfirst(trim($data["ns"]));
-			}
-			
-			$verif = $this->md_pharmacie->verif_produit_modif(ucfirst(trim($data['nc'])),trim($data['cat']),trim($data['fam']),trim($data['fors']),trim($data['dos']),trim($data['uni']),trim($data['id']));
+			}*/
+			if(trim($data['dos']) ==""){$data['dos']=NULL;}
+			if(ucfirst(trim($data['uni'])) ==""){$data['uni']=NULL;}
+			$verif = $this->md_pharmacie->verif_produit_modif1(ucfirst(trim($data['nc'])),trim($data['for']),trim($data['dos']),trim($data['uni']),trim($data['id']));
 			if(!$verif){
 				$donnees = array(
 					"med_sNc"=>ucfirst(trim($data["nc"])),
-					"med_sNs"=>$ns,
-					"cat_id"=>trim($data["cat"]),
-					"fam_id"=>trim($data["fam"]),
+					"med_sNs"=>NULL,
+					"cat_id"=>NULL,
+					"fam_id"=>NULL,
 					"for_id"=>trim($data["for"]),
 					"med_iDosage"=>trim($data["dos"]),
 					"med_sUnite"=>trim($data["uni"])
@@ -917,7 +924,7 @@ class Pharmacie extends CI_Controller {
 				'elf_iRemise'=>0,
 				'elf_dDate'=>date("Y-m-d H:i:s"),//RABY
 				'date_dElf'=>date("Y-m-d"),//RABY
-				'elf_iSta'=>0//RABY
+				'elf_iSta'=>0,//RABY
 			);
 			
 			$in = $this->md_patient->ajout_elements_facture($tabDonnees);
@@ -964,6 +971,132 @@ class Pharmacie extends CI_Controller {
 				"log_dDate"=>date("Y-m-d H:i:s")
 			);
 			$this->md_connexion->rapport($log);	
+		
+	}
+	
+	public function effectuerVente2()
+	{
+		date_default_timezone_set('Africa/Brazzaville');
+		$data = $this->input->post();
+		if(count($data['code']) == $data['qte'][0]){
+			$this->md_pharmacie->vide();
+			
+			/*if($data['typePaie']=='comptant'){
+				$tas = NULL;
+				$ass= NULL;
+				$SituatAss=0;//RABY
+				$bph= NULL;
+				$reste= $data['montantTotal'] - $data['montantPaye'];
+				$montantAss = NULL;
+			}
+			elseif($data['typePaie']=='bonpharmacie'){
+				$tas = NULL;
+				$ass= NULL;
+				$SituatAss=0;//RABY
+				$bn = $this->md_pharmacie->recup_bon($data['bon']);
+				$bph = $bn->bph_id;
+				$montantBon = $bn->bph_iMontantConso;
+				$resultat = $montantBon+$data['montantTotal'];
+				$resteBon = $bn->bph_iReste-$data['montantTotal'];
+				$don = array('bph_iReste'=>$resteBon,'bph_iMontantConso'=>$resultat);
+				$update = $this->md_pharmacie->maj_bon($don, $bph);
+				$reste = 0;
+				$montantAss = NULL;
+				$data['montantPaye'] = $data['montantTotal'];
+				
+			}elseif($data['typePaie']=='assurance'){
+				$tas = $data['tas'];
+				$ass= $data['ass'];
+				$SituatAss=1;//RABY
+				$bph= NULL;
+				$reste= $data['montantTotal'] - ($data['montantPaye'] + $data['montantAss']);
+				$montantAss = $data['montantAss'];
+			}
+			
+			$donnees = array(
+				'per_id'=>$this->md_config->get_session(),
+				'fac_iSta'=>1,
+				'bph_id'=>$bph,
+				'fac_sObjet'=>'Vente médicament',
+				'fac_iMontant'=>$data['montantTotal'],
+				'fac_iMontantPaye'=>$data['montantPaye'],
+				'fac_iMontantAss'=>$montantAss,
+				'fac_iSituationAss'=>$SituatAss,
+				'fac_iReste'=>$reste,
+				'tas_id'=>$tas,
+				'ass_id'=>$ass,
+				'fac_dDatePaie'=>date("Y-m-d")
+			);
+			$insert = $this->md_patient->ajout_facture($donnees);*/
+			
+			
+			for($i=0; $i<count($data['qte']) AND $i<count($data['idAch']) AND $i<count($data['sousMontant']);$i++){
+				
+				/*$tabDonnees = array(
+					'fac_id'=>$insert,
+					'ach_id'=>$data['idAch'][$i],
+					'elf_iQte'=>$data['qte'][$i],
+					'elf_iCout'=>$data['sousMontant'][$i],//RABY
+					'elf_iRemise'=>0,
+					'elf_dDate'=>date("Y-m-d H:i:s"),//RABY
+					'date_dElf'=>date("Y-m-d"),//RABY
+					'elf_iSta'=>0,//RABY
+				);
+				
+				$in = $this->md_patient->ajout_elements_facture($tabDonnees);*/
+				/*if($in){*/
+					$recup = $this->md_pharmacie->recup_medicament_actifs($data['idAch'][$i]);
+					
+					$modif = $recup->ach_iQte - $data['qte'][$i];
+					$dataUpdate = array('ach_iQte'=>$modif);
+					$update = $this->md_pharmacie->maj_vente($data['idAch'][$i],$dataUpdate);
+					
+					//RABY
+					$verifQte=$this->md_pharmacie->verif_stock_restant($data['idAch'][$i]);
+					if($verifQte->ach_iQte <= 0){
+						$datarupture = array(
+							'ach_id'=>$data['idAch'][$i],
+							'his_iSta'=>1,
+							'his_dDateDebutRup'=>date("Y-m-d")
+						);
+						$rupture = $this->md_pharmacie->rupture($datarupture);
+					}
+					//RABY
+				/*}*/
+			}
+			
+			$donneDis = array(
+				'dis_iSta'=>2,
+				'dis_iQteD'=>$data['qte'][0],
+			);
+			$this->md_pharmacie->maj_dispenser($donneDis,$data['dis']);
+			
+			
+			for($k=0; $k<count($data['code']);$k++){			
+					
+				$donn = array(
+					'pro_iSta'=>2,
+					'pro_dDateDestock'=>date("Y-m-d"),
+					'pro_sMotif'=>'Produit(s) vendu(s)'
+				);
+				$this->md_pharmacie->maj_code($donn,$data['code'][$k]);
+			}
+			$recup = $this->md_pharmacie->recup_medicament_actifs($data['idAch'][0]);
+			$log = array(
+				"log_iSta"=>0,
+				"per_id"=>$this->md_config->get_session(),
+				"log_sTable"=>"t_dispenser_dis",
+				"log_sIcone"=>"Dispenser le medicament",
+				"log_sAction"=>"dispenser un medicament",
+				"log_sActionDetail"=>"a dispenser le medicament ".$recup->med_sLibelle." quantié : <strong style='text-decoration:underline'>".$data['qte'][0]."</strong>",
+				"log_dDate"=>date("Y-m-d H:i:s")
+			);
+			$this->md_connexion->rapport($log);
+		}else{
+			echo 'Le nombre de medicament que vous voulez dispenser un inférieur à la quantité demandée';
+		}
+		
+			
 		
 	}
 	
@@ -1202,6 +1335,14 @@ class Pharmacie extends CI_Controller {
 		}
 	}	
 	
+	public function recupQuantite()
+	{
+		
+		$data = $this->input->post();
+		$qte = $this->md_pharmacie->recupQuantite($data["id"]);
+		echo $qte->ach_iQte;
+	}
+	
 	
 	public function recupFictif()
 	{
@@ -1226,10 +1367,10 @@ class Pharmacie extends CI_Controller {
 						echo '<input type="hidden" name="code[]" value="'.$ls->fic_sCode.'"/>';
 					}
 					echo '</td>';
-					echo '<td>'.  $l->fic_iPu . ' Fcfa</td>';
+					echo '<td class="cacher">'.  $l->fic_iPu . ' Fcfa</td>';
 					echo '<td><input type="hidden" name="qte[]" value="'.$l->total.'"  />'.$l->total.' <input type="hidden" name="idAch[]" value="'.$ls->ach_id.'"/></td>';
 					$sous = $l->total* $l->fic_iPu;
-					echo '<td><input type="hidden" name="sousMontant[]" value="'.$sous.'"/>' .$sous. ' Fcfa</td>';
+					echo '<td class="cacher"><input type="hidden" name="sousMontant[]" value="'.$sous.'"/>' .$sous. ' Fcfa</td>';
 					echo '<td class="text-center"><a href="javascript:(); " rel="'.$l->fic_sProd.'" class="delete suppList" title="Supprimer"><i class="zmdi zmdi-delete text-danger" style="font-size:20px"></i></a></td>';
 				echo '</tr>';
 				

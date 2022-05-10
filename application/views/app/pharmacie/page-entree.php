@@ -1,6 +1,6 @@
 ﻿
 <?php include(dirname(__FILE__) . '/../includes/header.php'); ?>
-<?php $liste = $this->md_pharmacie->liste_medicament(); ?>
+<?php $liste = $this->md_pharmacie->Liste_medicaments(); ?>
 <?php $listeCat = $this->md_parametre->liste_categorie_produit_actifs(); ?>
 <?php $listeFour = $this->md_pharmacie->liste_fournisseur_actifs(); ?>
 <?php $listeFor = $this->md_parametre->liste_forme_produit_actifs(); ?>

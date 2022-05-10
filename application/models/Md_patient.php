@@ -3462,7 +3462,27 @@ class Md_patient extends CI_Model {
 		->where($this->tableAcm.".pat_id",$pat)
 		->get($this->tableAcm)->row();
 	}
+	//RABY
+	public function element_ordonnance_pat($id, $pat)
+	{
+		return $this->db
+		->join($this->tableOrd, $this->tableOrd.'.ord_id ='.$this->tableElo.'.ord_id ','inner')
+		->join($this->tableMed, $this->tableMed.'.med_id ='.$this->tableElo.'.med_id ','inner')
+		->join($this->tableAch, $this->tableAch.'.med_id ='.$this->tableMed.'.med_id ','inner')
+		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableOrd.'.pat_id ','inner')
+		->where($this->tableElo.".elo_id",$id)
+		->where($this->tableOrd.".pat_id",$pat)
+		->get($this->tableElo)->row();
+	}
+	public function recup_element_ordonnance_Achat($id)
+	{
+		return $this->db
+		->join($this->tableMed, $this->tableMed.'.med_id ='.$this->tableAch.'.med_id ','inner')
+		->where($this->tableMed.".med_id",$id)
+		->get($this->tableAch)->row();
+	}
 	
+	//RABY
 	/** Consultation */	
 	public function verif_sejour($acm, $date)
 	{
@@ -4117,6 +4137,16 @@ class Md_patient extends CI_Model {
 		->get($this->tableElf)->result();
 	}	
 	
+	public function element_facture1($id)
+	{
+		return $this->db
+		->join($this->tableAch, $this->tableAch.'.ach_id ='.$this->tableElf.'.ach_id ','left')
+		->join($this->tableMed, $this->tableMed.'.med_id ='.$this->tableAch.'.med_id ','left')
+		->join($this->tableFor, $this->tableMed.'.for_id ='.$this->tableFor.'.for_id ','left')
+		->where($this->tableElf.".fac_id",$id)
+		->get($this->tableElf)->result();
+	}	
+	
 	
 	public function detail_facture($id)
 	{
@@ -4197,7 +4227,33 @@ class Md_patient extends CI_Model {
 		->order_by($this->tableAcm.".acm_id", "desc")
 		->get($this->tableAcm)->result();
 	}
+	//RABY
+	public function liste_element_ordonnance($date)
+	{
+		return $this->db
+		->limit(100)
+		->join($this->tableOrd, $this->tableOrd.'.ord_id ='.$this->tableElo.'.ord_id ','inner')
+		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableOrd.'.pat_id ','inner')
+		->where('DATEDIFF(hour,'.$this->tableOrd.'.ord_dDate,\''.$date.'\') <=',1)
+		->where($this->tableElo.".elo_sOuvert", Null)
+		->order_by($this->tableOrd.".ord_id", "desc")
+		->get($this->tableElo)->result();
+	}
 	
+	public function liste_element_ordonnance2($date)
+	{
+		return $this->db
+		->limit(100)
+		->join($this->tableMed, $this->tableMed.'.med_id ='.$this->tableElo.'.med_id ','inner')
+		->join($this->tableAch, $this->tableAch.'.med_id ='.$this->tableMed.'.med_id ','inner')
+		->join($this->tableOrd, $this->tableOrd.'.ord_id ='.$this->tableElo.'.ord_id ','inner')
+		->join($this->tablePat, $this->tablePat.'.pat_id ='.$this->tableOrd.'.pat_id ','inner')
+		->where($this->tableElo.".elo_sOuvert", Null)
+		->where($this->tableElo.".elo_iSta", 1)
+		->order_by($this->tableOrd.".ord_id", "desc")
+		->get($this->tableElo)->result();
+	}
+	//RABY
 	
 	public function recherche_element_caisse($search)
 	{	
@@ -5123,6 +5179,11 @@ class Md_patient extends CI_Model {
 	
 	public function ajout_element_ordonnance($data){
 		return $this->db->insert($this->tableElo,$data);
+	}
+	public function maj_element_ordonnance($id,$data){
+		return $this->db
+		->where("elo_id",$id)
+		->update($this->tableElo,$data);
 	}
 	
 	public function ajout_prescription_soins($data){

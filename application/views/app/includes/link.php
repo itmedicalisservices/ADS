@@ -55,6 +55,7 @@
 		var orientation = <?php echo json_encode(site_url('patient/accueil')); ?>;
 		var ajoutOrientation = <?php echo json_encode(site_url('patient/ajoutOrientation')); ?>;
 		var ensembleFacture = <?php echo json_encode(site_url('caisse/ensembleFacture')); ?>;
+		var ensembleFactureOrd = <?php echo json_encode(site_url('caisse/ensembleFactureOrd')); ?>;
 		var chargeAssurance = <?php echo json_encode(site_url('caisse/chargeAssurance')); ?>;
 		var ajoutFactureCaisse = <?php echo json_encode(site_url('caisse/ajoutFactureCaisse')); ?>;
 		var detailFacture = <?php echo json_encode(site_url('facture/detail')); ?>;
@@ -112,6 +113,7 @@
 		var listeArmoireSalle = <?php echo json_encode(site_url('parametre/listeArmoireSalle')); ?>;
 		var listeCelluleArmoire = <?php echo json_encode(site_url('parametre/listeCelluleArmoire')); ?>;
 		var effectuerVente = <?php echo json_encode(site_url('pharmacie/effectuerVente')); ?>;
+		var effectuerVente2 = <?php echo json_encode(site_url('pharmacie/effectuerVente2')); ?>;
 		var ajoutClient = <?php echo json_encode(site_url('pharmacie/ajoutClient')); ?>;
 		var modifierClient = <?php echo json_encode(site_url('pharmacie/modifierClient')); ?>;
 		var ajoutBon = <?php echo json_encode(site_url('pharmacie/ajoutBon')); ?>;
@@ -625,5 +627,8 @@
 		var modifierVaccin = <?php echo json_encode(site_url('Parametre/modifierVaccin')); ?>;
 		var addCourbe = <?php echo json_encode(site_url('Parametre/addCourbe')); ?>;
 		var modifierCourbe = <?php echo json_encode(site_url('Parametre/modifierCourbe')); ?>;
+		
+		
+		var recupQuantite = <?php echo json_encode(site_url('pharmacie/recupQuantite')); ?>;
 		//RABY
 	</script>

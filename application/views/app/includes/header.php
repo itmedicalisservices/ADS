@@ -3,7 +3,9 @@ if (!isset($_SESSION["armee"])){
 	redirect();
 }
 
+
 $user = $this->md_connexion->personnel_connect();
+//$sms = $this->md_config->SendSms();
 
 
 date_default_timezone_set('Africa/Brazzaville');

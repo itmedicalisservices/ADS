@@ -1030,75 +1030,215 @@ $odij = date("Y-m-d"); $heure = date("H:i:s") ;?>
 								</form>
                             </div>
 							
-							
 							<div role="tabpanel" class="tab-pane" id="ordonnance">
-								<div class="header" style="margin-top:45px">
+								<div class="header" style="">
 									<h2>Établir une ordonnance <small>Ajoutez les éléments dans la liste et puis validez</small> </h2>
 								</div>
-								
-								<div class="body">
-									<div class="table-responsive">
-										<form method="post" action="<?php echo site_url('consultation/ajoutOrdonnance') ;?>" id="form-ord">
-											<div class="retour-ord"></div>
-											<table class="table table-bordered table-striped table-hover" style="font-size:12px">
-												<thead>
-													<tr>
-														<th style="width:50%">Produit</th>
-														<th style="width:30px">Qte</th>
-														<th style="width:180px">Posologie</th>
-														<th style="width:30px">Durée</th>
-														<th style="width:50px"  class="text-center"><i class="fa fa-wrench"></i></th>
-													</tr>
-													<tr>
-														<td>
-															<select id="med" onChange="groupe();" style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
-																<option value="">----- Prescription * -----</option>
-																 <?php foreach($listeMed AS $l){ ?>
-																<option value="<?php echo  $l->med_sNc.' '.$l->for_sLibelle.' '.$l->med_iDosage.''.$l->med_sUnite;?>"><?php echo  $l->med_sNc.' '.$l->for_sLibelle.' '.$l->med_iDosage.''.$l->med_sUnite;?></option>
-																 <?php } ?>
-																 <option value="autre">Autre</option>
-															</select>
-															<div id="bloc" class="cacher">
-																<input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>
-																<input type="text" id="forme" style="width:25%" placeholder="forme"/>
-																<input type="text" id="dosage" style="width:15%" placeholder="dosage"/>
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="row clearfix">
+										<div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+											<div class="panel-group" id="accordion_17" role="tablist" aria-multiselectable="true">
+												<div class="panel panel-col-grey">
+													<div class="panel-heading" role="tab" id="headingOne_17">
+														<h4 class="panel-title"> <a role="button" data-toggle="collapse" data-parent="#accordion_17" href="#collapseOne_17" aria-expanded="true" aria-controls="collapseOne_17" style="font-size:14px"><b>OPTION 1</b> </a> </h4>
+													</div>
+													<div id="collapseOne_17" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_17">
+														<div class="panel-body"> 
+															<div class="body">
+																<div class="table-responsive">
+																	<form id="form-ord">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="width:20%">Produit</th>
+																					<th style="width:20%">stock</th>
+																					<th style="width:10%">Qte</th>
+																					<th style="width:10%">Posologie</th>
+																					<th style="width:10%">Durée</th>
+																					<th style="width:10%">Renouvelable</th>
+																					<th style="width:10%">Frequence</th>
+																					<th style="width:10%"  class="text-center"><i class="fa fa-wrench"></i></th>
+																				</tr>
+																				<tr>
+																					<td style="padding:0;width:20%;">
+																						<select id="med" class="selectProduit selectord" <?php //echo 'onChange="groupe();"'; ?> style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
+																							<option value="">----- Prescription * -----</option>
+																							 <?php foreach($listeMed AS $l){ ?>
+																							<option value="<?php echo $l->med_id.'-/-'.$l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
+																							 <?php } ?>
+																							<!-- <option value="autre">Autre</option>-->
+																						</select>
+																						<div id="bloc" class="cacher">
+																							<input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>
+																							<input type="text" id="forme" style="width:25%" placeholder="forme"/>
+																							<input type="text" id="dosage" style="width:15%" placeholder="dosage"/>
+																						</div>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="text" min="1" readonly id="stock" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="qte" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="pos" style="width:55%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																						<select id="typePos" style="width:40%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Cp">Cp</option>
+																							<option value="Inj">Inj</option>
+																							<option value="Amp">Amp</option>
+																							<option value="Clt">Clt</option>
+																							<option value="UI">UI</option>
+																						</select>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="duree" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeRenew" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="NON">NON</option>
+																							<option value="OUI">OUI</option>
+																						</select>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeFreq" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Matin-Midi-Soir">M-M-S</option>
+																							<option value="Matin">Matin</option>
+																							<option value="Midi">Midi</option>
+																							<option value="Soir">Soir</option>
+																							<option value="Matin-Midi">Matin-Midi</option>
+																							<option value="Matin-Soir">Matin-Soir</option>
+																							<option value="Midi-Soir">Midi-Soir</option>
+																						</select>
+																					</td>
+																					<td class="text-center" style="padding:0;width:10%;">
+																						<a href="javascript:();" class="btn btn-xs waves-effect bg-blue-grey" id="addOrd"><i class="fa fa-plus"></i></a>
+																					</td>
+																				</tr>
+																			</thead>
+																			<tbody id="tbodyOrd"></tbody>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	
+																	<button type="submit" class="btn btn-success waves-effect pull-right addOrd" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>
+																	<a href="#or" class="cacher cliqueOrd">clique</a>
+																</div>
 															</div>
-														</td>
-														<td>
-															<input type="number" id="qte" style="width:100%"/>
-															
-														</td>
-														<td>
-															<input type="number" id="pos" style="width:40%"/>
-															<select id="typePos" style="width:55%;padding-bottom:5px;padding-top:5px">
-																<option value="Cp">Cp</option>
-																<option value="Inj">Inj</option>
-																<option value="Amp">Amp</option>
-																<option value="Clt">Clt</option>
-																
-															</select>
-															
-														</td>
-														<td>
-															<input type="number" id="duree" style="width:100%"/>
-															
-														</td>
-														
-														<td class="text-center">
-															<a href="javascript:();" class="btn btn-sm waves-effect bg-blue-grey" id="addOrd"><i class="fa fa-plus"></i></a>
-														</td>
-													</tr>
-												</thead>
-											   
-												<tbody id="tbodyOrd"></tbody>
-											</table>
-											<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
-										
-										<button type="submit" class="btn btn-success waves-effect pull-right addOrd" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
-										</form>
-										<a href="#or" class="cacher cliqueOrd">clique</a>
+														</div>
+													</div>
+												</div>
+												<div class="panel panel-col-blue-grey">
+													<div class="panel-heading" role="tab" id="headingTwo_17">
+														<h4 class="panel-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_17" href="#collapseTwo_17" aria-expanded="false"
+																   aria-controls="collapseTwo_17" style="font-size:14px"> <b> OPTION 2</b></a> </h4>
+													</div>
+													<div id="collapseTwo_17" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo_17">
+														<div class="panel-body"> 
+															<div class="body">
+																<div class="table-responsive">
+																	<form id="form-ord2">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="width:20%">Produit</th>
+																					<th style="width:10%">Qte</th>
+																					<th style="width:10%">Posologie</th>
+																					<th style="width:10%">Durée</th>
+																					<th style="width:10%">Renouvelable</th>
+																					<th style="width:10%">Frequence</th>
+																					<th style="width:10%"  class="text-center"><i class="fa fa-wrench"></i></th>
+																				</tr>
+																				<tr>
+																					<td style="padding:0;width:20%;">
+																						<!-- <select id="med" class="selectProduit selectord" onChange="groupe();" style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
+																							<option value="">----- Prescription * -----</option>
+																							 <?php foreach($listeMed AS $l){ ?>
+																							<option value="<?php echo $l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
+																							 <?php } ?>
+																							<option value="autre">Autre</option>
+																						</select>-->
+																						<input type="text" id="medi2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px" placeholder="nom du produit"/>
+																						<div id="bloc" class="cacher">
+																							<!-- <input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>-->
+																							<input type="text" id="forme2" style="width:25%" placeholder="forme"/>
+																							<input type="text" id="dosage2" style="width:15%" placeholder="dosage"/>
+																						</div>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="qte2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="pos2" style="width:55%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																						<select id="typePos2" style="width:40%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Cp">Cp</option>
+																							<option value="Inj">Inj</option>
+																							<option value="Amp">Amp</option>
+																							<option value="Clt">Clt</option>
+																							<option value="UI">UI</option>
+																						</select>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="duree2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeRenew2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="NON">NON</option>
+																							<option value="OUI">OUI</option>
+																						</select>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeFreq2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Matin-Midi-Soir">M-M-S</option>
+																							<option value="Matin">Matin</option>
+																							<option value="Midi">Midi</option>
+																							<option value="Soir">Soir</option>
+																							<option value="Matin-Midi">Matin-Midi</option>
+																							<option value="Matin-Soir">Matin-Soir</option>
+																							<option value="Midi-Soir">Midi-Soir</option>
+																						</select>
+																					</td>
+																					<td class="text-center" style="padding:0;width:10%;">
+																						<a href="javascript:();" class="btn btn-xs waves-effect bg-blue-grey" id="addOrd2"><i class="fa fa-plus"></i></a>
+																					</td>
+																				</tr>
+																			</thead>
+																			<tbody id="tbodyOrd2"></tbody>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	
+																	<button type="submit" class="btn btn-success waves-effect pull-right addOrd2" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>
+																	<!--<form id="form-ord2">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="">Définir les produits à prescrire</th>
+																				</tr>
+																					<td style="padding:0">
+																						<textarea id="ordo" name="ordo" rows="20" style="height:155px;width:100%;border:1px solid #ccc;border-radius:5px" placeholder="Saisissez ici..."></textarea>
+																					</td>
+																				</tr>
+																			</thead>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	<button type="button" class="btn btn-success waves-effect pull-right addOrd2" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>-->
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+										</div>
 									</div>
-								</div>
+								</div>						
                             </div>
 							
 							<div role="tabpanel" class="tab-pane" id="soins">

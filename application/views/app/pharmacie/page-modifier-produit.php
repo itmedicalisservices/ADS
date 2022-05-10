@@ -1,6 +1,6 @@
 ﻿<?php 
 	include(dirname(__FILE__) . '/../includes/header.php');
-	$f = $this->md_pharmacie->recup_produit($med_id);
+	$f = $this->md_pharmacie->recup_produit1($med_id);
 	$listeCat = $this->md_parametre->liste_categorie_produit_actifs($f->cat_id);
 	$listeFam = $this->md_parametre->liste_famille_produit_actifs($f->fam_id);
 	$listeFor = $this->md_parametre->liste_forme_produit_actifs($f->for_id);
@@ -46,14 +46,7 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="col-sm-6">
-																	<div class="form-group">
-																		<label>Nom scientifique</label>
-																		<div class="form-line">
-																			<input type="text" name="ns" value="<?php echo $f->med_sNs; ?>" class="form-control ns">
-																		</div>
-																	</div>
-																</div>																															
+																																														
 																<div class="col-sm-6">
 																	<div class="form-group">
 																		<label>Dosage *</label>
@@ -62,7 +55,7 @@
 																		</div>
 																	</div>
 																</div>																
-																<div class="col-sm-6">
+																<div class="col-sm-4">
 																	<div class="form-group">
 																		<label>Unité *</label>
 																		<div class="form-line">
@@ -70,28 +63,6 @@
 																		</div>
 																	</div>
 																</div>
-															</div>														
-															<div class="row clearfix">
-																<div class="col-sm-4">
-																	<div class="form-group drop-custum">
-																		<label>Catégorie *</label>
-																		<select name="cat" id="cat" class="form-control deja obligatoire">
-																			<?php foreach($listeCat AS $l){ ?>
-																				<option value="<?php echo $l->cat_id; ?>" <?php if($l->cat_id==$f->cat_id){echo 'selected="selected"';} ?>><?php echo $l->cat_sLibelle; ?></option>
-																			<?php } ?>
-																		</select>
-																	</div>
-																</div>																
-																<div class="col-sm-4">
-																	<div class="form-group drop-custum">
-																		<label>Famille *</label>
-																		<select name="fam" id="fam" class="form-control deja obligatoire">
-																		<?php foreach($listeFam AS $fam){ ?>
-																			<option value="<?php echo $fam->fam_id; ?>" <?php if($fam->fam_id==$f->fam_id){echo 'selected="selected"';} ?>><?php echo $fam->fam_sLibelle; ?></option>
-																		<?php } ?>
-																		</select>
-																	</div>
-																</div>																	
 																<div class="col-sm-4">
 																	<div class="form-group drop-custum">
 																		<label>Forme *</label>
@@ -101,7 +72,27 @@
 																		<?php } ?>
 																		</select>
 																	</div>
-																</div>		
+																</div>
+																<div class="col-sm-4">
+																	<div class="form-group drop-custum">
+																		<label>Conditionement *</label>
+																		<input type="text" name="condi" value="<?php echo $f->med_sConditionment; ?>" class="form-control deja obligatoire">
+																	</div>
+																</div>	
+															</div>														
+															<div class="row clearfix">
+																<!--<div class="col-sm-4">
+																	<div class="form-group drop-custum">
+																		<label>Catégorie *</label>
+																		<select name="cat" id="cat" class="form-control deja obligatoire">
+																			<?php foreach($listeCat AS $l){ ?>
+																				<option value="<?php echo $l->cat_id; ?>" <?php if($l->cat_id==$f->cat_id){echo 'selected="selected"';} ?>><?php echo $l->cat_sLibelle; ?></option>
+																			<?php } ?>
+																		</select>
+																	</div>
+																</div>-->															
+																																
+																
 																<div class="col-sm-3">
 																	<button type="button" class="btn btn-raised bg-blue-grey" id="editProduit">Modifier</button>
 																</div>

@@ -21,12 +21,12 @@
 							<thead>
 								<tr>
 									<th>Montant total</th>
-									<th>Assureur</th>
-									<th>Bon pharmacie</th>
+									<!--<th>Assureur</th>
+									<th>Bon pharmacie</th>-->
 									<th>Client</th>
 									<th>Payé par le client</th>
-									<th>Payé par l'assurance</th>
-									<th>Reste à payer</th>
+									<!--<th>Payé par l'assurance</th>
+									<th>Reste à payer</th>-->
 									<th>N° Facture</th>
 									<th>Statut</th>
 									<th style="width:60px">Action</th>
@@ -34,30 +34,33 @@
 							</thead>
 						   
 							<tbody>
-							<?php foreach($liste AS $l){ ?>
+							<?php 
+								$Total1=0;
+								$Total2=0;
+							foreach($liste AS $l){ ?>
 								<tr>
 									<td>
-										<?php echo $l->fac_iMontant; ?> <small>FCFA</small>
+										<?php $Total1+=$l->fac_iMontant; echo $l->fac_iMontant; ?> <small>FCFA</small>
 									</td>
-									<td>
+									<!--<td>
 										<?php if(is_null($l->ass_sLibelle)){echo "<i class='text-danger'>pas d'assurance</i>";}else{echo $l->ass_sLibelle;} ?>
 									</td>
 									<td>
 										<?php if(is_null($l->bph_id)){echo "<i class='text-danger'>Paiement sans bon</i>";}else{echo $l->bph_sNumBon;} ?>
-									</td>
+									</td>-->
 									<td>
-										<?php if(is_null($l->bph_id)){echo "<i class='text-danger'>Client non enregistré</i>";}else{echo $l->clt_sNom." ".$l->clt_sPrenom;} ?>
+										<?php echo $l->pat_sNom." ".$l->pat_sPrenom; ?>
 									</td>
 									
 									<td>
-										<?php echo $l->fac_iMontantPaye; ?> <small>FCFA</small>
+										<?php $Total2+=$l->fac_iMontantPaye; echo $l->fac_iMontantPaye; ?> <small>FCFA</small>
 									</td>
-									<td>
+									<!--<td>
 										<span class='<?php if(is_null($l->ass_sLibelle)){echo "text-danger";}?>'><?php if(!is_null($l->ass_sLibelle)){echo $l->fac_iMontantAss;}else{echo 0;} ?> <small>FCFA</small></span>
 									</td>
 									<td>
 										<?php echo $l->fac_iReste; ?> <small>FCFA</small>
-									</td>
+									</td>-->
 									<td>
 										<?php echo $l->fac_sNumero; ?>
 									</td>
@@ -83,6 +86,16 @@
 								</tr>
 							<?php } ?>
 							</tbody>
+							<tfoot>
+								<tr>
+									<td style="font-weight:bold;font-size:15px;">Total :<?php echo $Total1;?> FCFA</td>
+									<td ></td>
+									<td style="font-weight:bold;font-size:15px;">Total :<?php echo $Total2;?> FCFA</td>
+									<td ></td>
+									<td ></td>
+									<td ></td>
+								</tr>
+							</tfoot>
 						</table>
                     </div>
                 </div>

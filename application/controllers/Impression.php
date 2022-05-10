@@ -38,6 +38,36 @@ class Impression extends CI_Controller {
 		$this->dompdf->stream("pass_caisse".$id.".pdf",array('attachment'=>0));
 	}
 
+	public function recu_pharmacie($id){
+		date_default_timezone_set('Africa/Brazzaville');
+				
+
+		$this->load->view('impression/recu_pharmacie', array("id"=>$id));
+		
+		// return ;
+	
+		//chargement de HTML
+		$html=$this->output->get_output();
+		
+		//chargement de la librairie pdf
+		$this->load->library('pdf');
+		
+		//chargement du contenu HTML
+		$this->dompdf->loadHTML($html);
+		
+		//setup paper size and orientation
+		$this->dompdf->setPaper('A7', 'portrait');//recu_pharmacie
+		// $this->dompdf->setPaper('A4', 'portrait');//courrier;dossier_medical;fiche_personnel;laboratoire;liste-inventaire-stock;hospitalisation
+		// $this->dompdf->setPaper('A5', 'portrait');//ordonnance;acte_de_deces;acte_de_naissance;consultation;imagerie
+		// $this->dompdf->setPaper('A5', 'portrait');//acte_de_naissance
+		
+		//render HTML as PDF
+		$this->dompdf->render();
+		
+		//output PDF
+		$this->dompdf->stream("recu_pharmacie_".$id.".pdf",array('attachment'=>0));
+	}
+
 	
 
 	public function cession_caisse($id){
@@ -478,6 +508,7 @@ class Impression extends CI_Controller {
 		
 		}
 	}
+	
 	
 	public function rapport_epidemiologique($id)
 	{

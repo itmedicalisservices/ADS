@@ -571,76 +571,215 @@
 								</form>
                             </div>
 							
-							
 							<div role="tabpanel" class="tab-pane" id="ordonnance">
-								<div class="header" style="margin-top:45px">
+								<div class="header" style="">
 									<h2>Établir une ordonnance <small>Ajoutez les éléments dans la liste et puis validez</small> </h2>
 								</div>
-								
-								<div class="body">
-									<div class="table-responsive">
-										<form method="post" action="<?php echo site_url('consultation/ajoutOrdonnance') ;?>" id="form-ord">
-											<div class="retour-ord"></div>
-											<table class="table table-bordered table-striped table-hover" style="font-size:12px">
-												<thead>
-													<tr>
-														<th style="width:50%">Produit</th>
-														<th style="width:30px">Qte</th>
-														<th style="width:180px">Posologie</th>
-														<th style="width:30px">Durée</th>
-														<th style="width:50px"  class="text-center"><i class="fa fa-wrench"></i></th>
-													</tr>
-													<tr>
-														<td>
-															<select id="med" onChange="groupe();" style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
-																<option value="">----- Prescription * -----</option>
-																 <?php foreach($listeMed AS $l){ ?>
-																<option value="<?php echo  $l->med_sNc.' '.$l->for_sLibelle.' '.$l->med_iDosage.''.$l->med_sUnite;?>"><?php echo  $l->med_sNc.' '.$l->for_sLibelle.' '.$l->med_iDosage.''.$l->med_sUnite;?></option>
-																 <?php } ?>
-																 <option value="autre">Autre</option>
-															</select>
-															<div id="bloc" class="cacher">
-																<input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>
-																<input type="text" id="forme" style="width:25%" placeholder="forme"/>
-																<input type="text" id="dosage" style="width:15%" placeholder="dosage"/>
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<div class="row clearfix">
+										<div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+											<div class="panel-group" id="accordion_17" role="tablist" aria-multiselectable="true">
+												<div class="panel panel-col-grey">
+													<div class="panel-heading" role="tab" id="headingOne_17">
+														<h4 class="panel-title"> <a role="button" data-toggle="collapse" data-parent="#accordion_17" href="#collapseOne_17" aria-expanded="true" aria-controls="collapseOne_17" style="font-size:14px"><b>OPTION 1</b> </a> </h4>
+													</div>
+													<div id="collapseOne_17" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_17">
+														<div class="panel-body"> 
+															<div class="body">
+																<div class="table-responsive">
+																	<form id="form-ord">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="width:20%">Produit</th>
+																					<th style="width:20%">stock</th>
+																					<th style="width:10%">Qte</th>
+																					<th style="width:10%">Posologie</th>
+																					<th style="width:10%">Durée</th>
+																					<th style="width:10%">Renouvelable</th>
+																					<th style="width:10%">Frequence</th>
+																					<th style="width:10%"  class="text-center"><i class="fa fa-wrench"></i></th>
+																				</tr>
+																				<tr>
+																					<td style="padding:0;width:20%;">
+																						<select id="med" class="selectProduit selectord" <?php //echo 'onChange="groupe();"'; ?> style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
+																							<option value="">----- Prescription * -----</option>
+																							 <?php foreach($listeMed AS $l){ ?>
+																							<option value="<?php echo $l->med_id.'-/-'.$l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
+																							 <?php } ?>
+																							<!-- <option value="autre">Autre</option>-->
+																						</select>
+																						<div id="bloc" class="cacher">
+																							<input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>
+																							<input type="text" id="forme" style="width:25%" placeholder="forme"/>
+																							<input type="text" id="dosage" style="width:15%" placeholder="dosage"/>
+																						</div>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="text" min="1" readonly id="stock" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="qte" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="pos" style="width:55%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																						<select id="typePos" style="width:40%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Cp">Cp</option>
+																							<option value="Inj">Inj</option>
+																							<option value="Amp">Amp</option>
+																							<option value="Clt">Clt</option>
+																							<option value="UI">UI</option>
+																						</select>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="duree" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeRenew" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="NON">NON</option>
+																							<option value="OUI">OUI</option>
+																						</select>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeFreq" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Matin-Midi-Soir">M-M-S</option>
+																							<option value="Matin">Matin</option>
+																							<option value="Midi">Midi</option>
+																							<option value="Soir">Soir</option>
+																							<option value="Matin-Midi">Matin-Midi</option>
+																							<option value="Matin-Soir">Matin-Soir</option>
+																							<option value="Midi-Soir">Midi-Soir</option>
+																						</select>
+																					</td>
+																					<td class="text-center" style="padding:0;width:10%;">
+																						<a href="javascript:();" class="btn btn-xs waves-effect bg-blue-grey" id="addOrd"><i class="fa fa-plus"></i></a>
+																					</td>
+																				</tr>
+																			</thead>
+																			<tbody id="tbodyOrd"></tbody>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	
+																	<button type="submit" class="btn btn-success waves-effect pull-right addOrd" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>
+																	<a href="#or" class="cacher cliqueOrd">clique</a>
+																</div>
 															</div>
-														</td>
-														<td>
-															<input type="number" id="qte" style="width:100%"/>
-															
-														</td>
-														<td>
-															<input type="number" id="pos" style="width:40%"/>
-															<select id="typePos" style="width:55%;padding-bottom:5px;padding-top:5px">
-																<option value="Cp">Cp</option>
-																<option value="Inj">Inj</option>
-																<option value="Amp">Amp</option>
-																<option value="Clt">Clt</option>
-																
-															</select>
-															
-														</td>
-														<td>
-															<input type="number" id="duree" style="width:100%"/>
-															
-														</td>
-														
-														<td class="text-center">
-															<a href="javascript:();" class="btn btn-sm waves-effect bg-blue-grey" id="addOrd"><i class="fa fa-plus"></i></a>
-														</td>
-													</tr>
-												</thead>
-											   
-												<tbody id="tbodyOrd"></tbody>
-											</table>
-											<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
-											<input type="hidden" value="<?php echo $hos->hos_id; ?>" name="hos">
-										
-										<button type="submit" class="btn btn-success waves-effect pull-right addOrd" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
-										</form>
-										<a href="#or" class="cacher cliqueOrd">clique</a>
+														</div>
+													</div>
+												</div>
+												<div class="panel panel-col-blue-grey">
+													<div class="panel-heading" role="tab" id="headingTwo_17">
+														<h4 class="panel-title"> <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_17" href="#collapseTwo_17" aria-expanded="false"
+																   aria-controls="collapseTwo_17" style="font-size:14px"> <b> OPTION 2</b></a> </h4>
+													</div>
+													<div id="collapseTwo_17" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo_17">
+														<div class="panel-body"> 
+															<div class="body">
+																<div class="table-responsive">
+																	<form id="form-ord2">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="width:20%">Produit</th>
+																					<th style="width:10%">Qte</th>
+																					<th style="width:10%">Posologie</th>
+																					<th style="width:10%">Durée</th>
+																					<th style="width:10%">Renouvelable</th>
+																					<th style="width:10%">Frequence</th>
+																					<th style="width:10%"  class="text-center"><i class="fa fa-wrench"></i></th>
+																				</tr>
+																				<tr>
+																					<td style="padding:0;width:20%;">
+																						<!-- <select id="med" class="selectProduit selectord" onChange="groupe();" style="width:100%;padding-bottom:5px;padding-top:5px;margin-bottom:10px">
+																							<option value="">----- Prescription * -----</option>
+																							 <?php foreach($listeMed AS $l){ ?>
+																							<option value="<?php echo $l->med_sNc;?>"><?php echo  $l->med_sNc;?></option>
+																							 <?php } ?>
+																							<option value="autre">Autre</option>
+																						</select>-->
+																						<input type="text" id="medi2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px" placeholder="nom du produit"/>
+																						<div id="bloc" class="cacher">
+																							<!-- <input type="text" id="medi" style="width:58%" placeholder="nom du produit"/>-->
+																							<input type="text" id="forme2" style="width:25%" placeholder="forme"/>
+																							<input type="text" id="dosage2" style="width:15%" placeholder="dosage"/>
+																						</div>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="qte2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="pos2" style="width:55%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																						<select id="typePos2" style="width:40%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Cp">Cp</option>
+																							<option value="Inj">Inj</option>
+																							<option value="Amp">Amp</option>
+																							<option value="Clt">Clt</option>
+																							<option value="UI">UI</option>
+																						</select>
+																					</td>
+																					<td style="padding:0;width:10%;">
+																						<input type="number" min="1" id="duree2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px"/>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeRenew2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="NON">NON</option>
+																							<option value="OUI">OUI</option>
+																						</select>
+																					</td>														
+																					<td style="padding:0;width:10%;">
+																						<select id="typeFreq2" style="width:100%;height:36px;border:1px solid #ccc;border-radius:5px">
+																							<option value="Matin-Midi-Soir">M-M-S</option>
+																							<option value="Matin">Matin</option>
+																							<option value="Midi">Midi</option>
+																							<option value="Soir">Soir</option>
+																							<option value="Matin-Midi">Matin-Midi</option>
+																							<option value="Matin-Soir">Matin-Soir</option>
+																							<option value="Midi-Soir">Midi-Soir</option>
+																						</select>
+																					</td>
+																					<td class="text-center" style="padding:0;width:10%;">
+																						<a href="javascript:();" class="btn btn-xs waves-effect bg-blue-grey" id="addOrd2"><i class="fa fa-plus"></i></a>
+																					</td>
+																				</tr>
+																			</thead>
+																			<tbody id="tbodyOrd2"></tbody>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	
+																	<button type="submit" class="btn btn-success waves-effect pull-right addOrd2" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>
+																	<!--<form id="form-ord2">
+																		<div class="retour-ord"></div>
+																		<table class="table table-bordered table-striped table-hover" style="font-size:12px">
+																			<thead>
+																				<tr>
+																					<th style="">Définir les produits à prescrire</th>
+																				</tr>
+																					<td style="padding:0">
+																						<textarea id="ordo" name="ordo" rows="20" style="height:155px;width:100%;border:1px solid #ccc;border-radius:5px" placeholder="Saisissez ici..."></textarea>
+																					</td>
+																				</tr>
+																			</thead>
+																		</table>
+																		<input type="hidden" value="<?php echo $acm_id; ?>" name="id">
+																		<input type="hidden" value="<?php echo $acm->pat_id; ?>" name="pat">
+																	<button type="button" class="btn btn-success waves-effect pull-right addOrd2" style="color:#fff"><i class="fa fa-check"></i>Valider l'ordonnance</button>
+																	</form>-->
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+										</div>
 									</div>
-								</div>
+								</div>						
                             </div>
 							
 							<div role="tabpanel" class="tab-pane" id="soins">
@@ -1430,11 +1569,12 @@
 </div>
 
 
- <script type="text/javascript">
+ 
+<script type="text/javascript">
         'use strict';
 		
 		
-		function groupe(){
+		/*function groupe(){
 			 var med = document.getElementById('med').value;
 			 if(med == "autre"){
 				 document.getElementById('bloc').classList.remove("cacher");
@@ -1442,7 +1582,7 @@
 			 else{
 				 document.getElementById('bloc').classList.add("cacher");
 			 }
-		}
+		}*/
 		
         var listeOrd = document.querySelector('#tbodyOrd');
         var addOrd = document.querySelector('#addOrd');
@@ -1463,52 +1603,69 @@
         {
             var med 	            = document.getElementById('med').value;
             var qte 	            = document.getElementById('qte').value;
+            var stock 	            = document.getElementById('stock').value;
             var duree 	            = document.getElementById('duree').value;
             var pos 	            = document.getElementById('pos').value;
             var typePos 	        = document.getElementById('typePos').value;
             var medi 	            = document.getElementById('medi').value;
             var forme 	            = document.getElementById('forme').value;
             var dosage 	            = document.getElementById('dosage').value;
-			
+            var typeRenew 	        = document.getElementById('typeRenew').value;
+            var typeFreq 	        = document.getElementById('typeFreq').value;
+			// alert(qte);
 			if(med !="autre"){
-				if(med == '' || qte == ''|| duree == ''|| pos == '') {
+				if(med == '' || qte == ''|| duree == ''|| pos == ''|| typeRenew == ''|| typeFreq == '') {
 					alert('Veuillez renseigner le champs.');	
 				}
 				else {
-					var contact = new Object();
-					contact.med	       	    = med;
-					contact.qte	    		= qte;
-					contact.duree	        = duree;
-					contact.pos	        	= pos;
-					contact.typePos	        = typePos;
-					annuaire.push(contact);
-					showListeOrdMed();	
-					document.getElementById('qte').value="";
-					document.getElementById('duree').value="";
-					document.getElementById('pos').value="";
+					if(qte <= stock){
+						var contact = new Object();
+						contact.med	       	    = med;
+						contact.qte	    		= qte;
+						contact.duree	        = duree;
+						contact.pos	        	= pos;
+						contact.typePos	        = typePos;
+						contact.typeRenew	    = typeRenew;
+						contact.typeFreq	    = typeFreq;
+						annuaire.push(contact);
+						showListeOrdMed();	
+						document.getElementById('qte').value="";
+						document.getElementById('duree').value="";
+						document.getElementById('pos').value="";
+					}else{
+						alert('Ce produit ne peut être ajouté car le stock est insuffisant');
+					}
+					
 				}
 			}
 			else{
-				if(medi == '' || forme == '' || dosage == '' || qte == ''|| duree == ''|| pos == '') {
+				if(medi == '' || forme == '' || dosage == '' || qte == ''|| duree == ''|| pos == '' || typeRenew == ''|| typeFreq == ''){
 					alert('Veuillez renseigner le champs.');	
 				}
 				else {
-					var contact = new Object();
-					contact.medi	       	= medi;
-					contact.forme	       	= forme;
-					contact.dosage	        = dosage;
-					contact.qte	    		= qte;
-					contact.duree	        = duree;
-					contact.pos	        	= pos;
-					contact.typePos	        = typePos;
-					annuaire.push(contact);
-					showListeOrdAutre();	
-					document.getElementById('medi').value="";
-					document.getElementById('forme').value="";
-					document.getElementById('dosage').value="";
-					document.getElementById('qte').value="";
-					document.getElementById('duree').value="";
-					document.getElementById('pos').value="";
+					if(qte <= stock){
+						var contact = new Object();
+						contact.medi	       	= medi;
+						contact.forme	       	= forme;
+						contact.dosage	        = dosage;
+						contact.qte	    		= qte;
+						contact.duree	        = duree;
+						contact.pos	        	= pos;
+						contact.typePos	        = typePos;
+						contact.typeRenew	    = typeRenew;
+						contact.typeFreq	    = typeFreq;
+						annuaire.push(contact);
+						showListeOrdAutre();	
+						document.getElementById('medi').value="";
+						document.getElementById('forme').value="";
+						document.getElementById('dosage').value="";
+						document.getElementById('qte').value="";
+						document.getElementById('duree').value="";
+						document.getElementById('pos').value="";
+					}else{
+						alert('Ce produit ne peut être ajouté car le stock est insuffisant');
+					}
+					
 				}
 			}
         }
@@ -1521,12 +1678,16 @@
             var tailleTableau = annuaire.length;            
                 
             for(var i = 0; i < tailleTableau; i++) {
-				
+				var tabMed="";
+				tabMed =annuaire[i].med.split("-/-");
+				alert(tabMed[1]);
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+ annuaire[i].med+'"/>' +annuaire[i].med + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value="'+ tabMed[0]+'"/><input type="hidden" name="med[]" value="'+ tabMed[1]+'"/>' +tabMed[1] + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + '</td>';
+				contenu += '<td><input type="hidden" name="renew[]" value="'+ annuaire[i].typeRenew+'"/>'+ annuaire[i].typeRenew + '</td>';
+				contenu += '<td><input type="hidden" name="freq[]" value="'+ annuaire[i].typeFreq+'"/>'+ annuaire[i].typeFreq + '</td>';
                 contenu += '<td class="text-center"><a href="javascript:();" onClick="removeOrdMed(' + i + ')" class="delete" title="Supprimer"><i class="zmdi zmdi-delete text-danger" style="font-size:20px"></i></a></td>';
                 contenu += '</tr>';
             }
@@ -1549,7 +1710,7 @@
 					jour ="jour";
 				}
                 contenu += '<tr>';
-                contenu += '<td><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
 				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
 				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
 				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + ' '+jour+'</td>';
@@ -1561,7 +1722,150 @@
 			// alert(contenu);
         }
     
-        </script>
+    </script>
+
+<script type="text/javascript">
+        'use strict';
+		
+		
+		/*function groupe(){
+			 var med = document.getElementById('med2').value;
+			 if(med == "autre"){
+				 document.getElementById('bloc2').classList.remove("cacher");
+			 }
+			 else{
+				 document.getElementById('bloc2').classList.add("cacher");
+			 }
+		}*/
+		
+		
+        var listeOrd2 = document.querySelector('#tbodyOrd2');
+        var addOrd2 = document.querySelector('#addOrd2');
+        var annuaire;
+        annuaire = new Array();
+
+        function removeOrdMed2(index) {
+            annuaire.splice(index,1);
+            showListeOrdMed2();	
+        }
+		
+		function removeOrdAutre2(index) {
+            annuaire.splice(index,1);
+            showListeOrdAutre2();	
+        }
+		
+        function addDetailOrd2() 
+        {
+			//alert(1);
+            //var med 	            = document.getElementById('med2').value;
+            var qte 	            = document.getElementById('qte2').value;
+            var duree 	            = document.getElementById('duree2').value;
+            var pos 	            = document.getElementById('pos2').value;
+            var typePos 	        = document.getElementById('typePos2').value;
+            var medi 	            = document.getElementById('medi2').value;
+            var forme 	            = document.getElementById('forme2').value;
+            var dosage 	            = document.getElementById('dosage2').value;
+            var typeRenew 	        = document.getElementById('typeRenew2').value;
+            var typeFreq 	        = document.getElementById('typeFreq2').value;
+			//alert(qte);
+			if(med !="autre"){
+				if(medi == '' || qte == ''|| duree == ''|| pos == ''|| typeRenew == ''|| typeFreq == '') {
+					alert('Veuillez renseigner le champs.');	
+				}
+				else {
+					var contact = new Object();
+					contact.medi	       	    = medi;
+					contact.qte	    		= qte;
+					contact.duree	        = duree;
+					contact.pos	        	= pos;
+					contact.typePos	        = typePos;
+					contact.typeRenew	    = typeRenew;
+					contact.typeFreq	    = typeFreq;
+					annuaire.push(contact);
+					showListeOrdMed2();	
+					document.getElementById('qte2').value="";
+					document.getElementById('duree2').value="";
+					document.getElementById('pos2').value="";
+				}
+			}
+			else{
+				if(medi == '' || forme == '' || dosage == '' || qte == ''|| duree == ''|| pos == '' || typeRenew == ''|| typeFreq == ''){
+					alert('Veuillez renseigner le champs.');	
+				}
+				else {
+					var contact = new Object();
+					contact.medi	       	= medi;
+					contact.forme	       	= forme;
+					contact.dosage	        = dosage;
+					contact.qte	    		= qte;
+					contact.duree	        = duree;
+					contact.pos	        	= pos;
+					contact.typePos	        = typePos;
+					contact.typeRenew	    = typeRenew;
+					contact.typeFreq	    = typeFreq;
+					annuaire.push(contact);
+					showListeOrdAutre2();	
+					document.getElementById('medi2').value="";
+					document.getElementById('forme2').value="";
+					document.getElementById('dosage2').value="";
+					document.getElementById('qte2').value="";
+					document.getElementById('duree2').value="";
+					document.getElementById('pos2').value="";
+				}
+			}
+        }
+
+        addOrd2.addEventListener('click', addDetailOrd2);
+
+        function showListeOrdMed2() 
+        {
+            var contenu="";
+            var tailleTableau = annuaire.length;            
+                
+            for(var i = 0; i < tailleTableau; i++) {
+				
+                contenu += '<tr>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+ annuaire[i].medi+'"/>' +annuaire[i].medi + '</td>';
+				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
+				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
+				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + '</td>';
+				contenu += '<td><input type="hidden" name="renew[]" value="'+ annuaire[i].typeRenew+'"/>'+ annuaire[i].typeRenew + '</td>';
+				contenu += '<td><input type="hidden" name="freq[]" value="'+ annuaire[i].typeFreq+'"/>'+ annuaire[i].typeFreq + '</td>';
+                contenu += '<td class="text-center"><a href="javascript:();" onClick="removeOrdMed2(' + i + ')" class="delete" title="Supprimer"><i class="zmdi zmdi-delete text-danger" style="font-size:20px"></i></a></td>';
+                contenu += '</tr>';
+            }
+
+            listeOrd2.innerHTML = contenu;
+			// alert(contenu);
+        }
+    
+        function showListeOrdAutre2() 
+        {
+            var contenu="";
+            var tailleTableau = annuaire.length;            
+                
+            for(var i = 0; i < tailleTableau; i++) {
+				var jour="";
+				if(annuaire[i].duree >1){
+					jour ="jours";
+				}
+				else{
+					jour ="jour";
+				}
+                contenu += '<tr>';
+                contenu += '<td><input type="hidden" name="medid[]" value=""/><input type="hidden" name="med[]" value="'+annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage +'"/>' +annuaire[i].medi + ' '+annuaire[i].forme + ' '+annuaire[i].dosage + '</td>';
+				contenu += '<td><input type="hidden" name="qte[]" value="'+ annuaire[i].qte+'"/>' + annuaire[i].qte + '</td>';
+				contenu += '<td><input type="hidden" name="pos[]" value="'+ annuaire[i].pos+ ' ' + annuaire[i].typePos+' /jour"/>' + annuaire[i].pos + ' ' + annuaire[i].typePos + ' /jour</td>';
+				contenu += '<td><input type="hidden" name="duree[]" value="'+ annuaire[i].duree+'"/>' + annuaire[i].duree + ' '+jour+'</td>';
+                contenu += '<td class="text-center"><a href="javascript:();" onClick="removeOrdAutre2(' + i + ')" class="delete" title="Supprimer"><i class="zmdi zmdi-delete text-danger" style="font-size:20px"></i></a></td>';
+                contenu += '</tr>';
+            }
+
+            listeOrd2.innerHTML = contenu;
+			// alert(contenu);
+        }
+    
+    </script>
 
  <script type="text/javascript">
         'use strict';

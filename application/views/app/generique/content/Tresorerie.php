@@ -25,6 +25,7 @@
 	}
 	
 	$liste = $this->md_patient->liste_element_caisse(date("Y-m-d H:i:s"));
+	$listeOrd = $this->md_patient->liste_element_ordonnance2(date("Y-m-d H:i:s"));
 	$listepms = $this->md_personnel->liste_personnel_medical_sante();
 	// $liste = $this->md_patient->liste_patient();
 	
@@ -50,7 +51,7 @@
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#income"> <span>Caisse normale</span></a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sales"> <span>Caisse hospitalisation</span></a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#divers"> <span>Caisse frais Divers</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pharma"> <span>Caisse pharmacies</span></a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mvt"> <span>Mouvements</span></a></li>
 			<a class="nav-link" href="javascript:;" style="color:green"> <b>SOLDE : <?php echo number_format($sommecumul->cumul + $sommecumulannulation->cumulannulation,0,",",".") ;?> <small>FCFA</small></b></a>
 			<a title="Actualiser" class="nav-link pull-right"  href="<?php echo site_url("app"); ?>"> <i style="font-size:20px" class="fa fa-refresh"></i></a>
@@ -120,6 +121,97 @@
 													</td>
 													<td>
 														<?php echo number_format($l->lac_iCout,0,",","."); ?>
+													</td>
+												</tr>
+											<?php } ?>
+										</tbody>
+									</table>
+								</form>
+								
+							</div>
+							<?php if($articleTotaux >$articleParPage){ ?>
+								<!--<div class="row clearfix">
+									<div class="col-sm-12 text-center">
+										<ul class="pagination">
+											<?php
+												for($i=1;$i<=$pagesTotales;$i++){
+													if($i==$pageActuelle){
+											?>
+											<li class="page-item active"><a class="page-link" href="javascript:();"><?=$i?></a></li>
+											<?php }else{  ?>
+											 <li class="page-item"><a class="page-link" href="<?php echo site_url("app");?>/?page=<?=$i?>"><?=$i?></a></li>
+											<?php } } ?>
+										</ul>
+									</div>
+								</div>-->
+							<?php } ?>
+						</div>
+					</div>
+				</div>
+                          
+            </div>
+            <div role="tabpanel" class="tab-pane active in" id="pharma">
+				
+                <div class="row clearfix">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="card">
+							<div class="header">	
+								<h2>liste des produits (<?php echo count($listeOrd); ?>)<?php if($user->per_iCnx===0){?><button id="factureOrd" type="button" class="btn bg-blue-grey waves-effect pull-right cacher" style="color:#fff"><i class="fa fa-check"></i> <b>Faire une facture</b></button><?php }?></h2>
+								<br><br><input type="text" name="search" id="search" placeholder="Recherche ..." style="width:30%;padding-left:1%;margin-left:1%" oninput="recherche_element_caisse1()" />
+								<a style="margin:0px" rel="" href="javascript:();" class="btn btn-sm waves-effect bg-blue-grey" id="" onclick="recherche_element_caisse()"><i class="fa fa-search" ></i></a>
+							<?php  //var_dump($this->md_config->get_session(),$this->session->itmedicalis);?>
+							<?php //var_dump(date("Y-m-d H:i:s"));?>
+							
+							</div>
+							<div class="body table-responsive" style="overflow:auto;height:500px">
+								<form id="form-factureOrd">
+									<table  class="table table-bordered table-striped table-hover">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th style="width:15%">Date</th>
+												<th style="width:15%">ID</th>
+												<th>Nom complet</th>
+												<th>Produit</th>
+												<th>Nombre d'unité</th>
+												<th>Coût(Fcfa)</th>
+											</tr>
+										</thead>
+									   
+										<tbody id="" class="listeElement">
+											<?php //var_dump($liste) ?>
+											<?php foreach($listeOrd AS $l){ ?>
+												<tr>
+													<td>
+													<?php if($user->per_iCnx==1){?>
+														<input type="hidden" name="pat" value="<?php echo $l->pat_id; ?>"/>
+														<?php }?>
+														<div class="switch">
+															<label>
+																<input type="checkbox" class="checkPatientOrd" name="id[]" value="<?php echo $l->elo_id . '-/-' .$l->pat_id; ?>">
+																<span class="lever"></span>
+															</label>
+														</div>
+													</td>
+													<td>
+														<?php echo $this->md_config->affDateTimeFr($l->ord_dDate); ?>
+													</td>
+													<td>
+														<?php echo $l->pat_sMatricule; ?>
+														
+													</td>
+													<td>
+														<?php echo $l->pat_sNom; ?> <?php echo $l->pat_sPrenom; ?>
+													</td>
+													<td>
+														<?php echo $l->med_sNc; ?>
+													</td>
+													
+													<td>
+														<?php echo $l->elo_iQuantite; ?>
+													</td>
+													<td>
+														<?php echo number_format($l->ach_iPrixVente,0,",","."); ?>
 													</td>
 												</tr>
 											<?php } ?>
@@ -525,6 +617,32 @@
 						</div>
 					</div>
 				
+				</div>
+				<div class="modal-footer">
+					<button id="btn-encaiss" onclick="this.style.display='none'" type="submit" class="btn btn-success waves-effect caisse" style="color:#fff"><i class="fa fa-check"></i> Encaisser</button>
+					<button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Fermer</button>
+				</div>
+			</form>
+        </div>
+    </div>
+</div>
+
+<!-- Large Size -->
+<div class="modal fade" id="modalPayeOrd" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" style="margin-top:5px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="largeModalLabel"></h4>
+            </div>
+			<form action="<?php echo site_url('caisse/effectuerVente2');?>" method="POST" id="form-vendre" style="border:1px solid black; margin-top:-30px">
+				<div class="modal-body" style="max-height:600px; overflow:auto;">
+					 <div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="card">
+							<div class="body table-responsive">
+								<div class="col-md-12" id="recepFactOrd"></div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button id="btn-encaiss" onclick="this.style.display='none'" type="submit" class="btn btn-success waves-effect caisse" style="color:#fff"><i class="fa fa-check"></i> Encaisser</button>
